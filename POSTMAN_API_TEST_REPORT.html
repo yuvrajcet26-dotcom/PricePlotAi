@@ -1,0 +1,2715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Postman API Test Execution Report — PricePilot AI Milestone 3</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg: #0e1117;
+      --card-bg: #161b22;
+      --card-hover: #1c2128;
+      --border: #30363d;
+      --postman-orange: #ff6c37;
+      --postman-hover: #e05626;
+      --text-main: #f0f6fc;
+      --text-sub: #8b949e;
+      --green: #238636;
+      --green-light: #2ea043;
+      --green-glow: rgba(46, 160, 67, 0.2);
+      --red: #da3633;
+      --blue: #388bfd;
+      --purple: #a371f7;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      padding: 0;
+      margin: 0;
+      line-height: 1.5;
+    }
+    
+    /* Top Postman Header Bar */
+    .top-nav {
+      background: #161b22;
+      border-bottom: 1px solid var(--border);
+      padding: 12px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .postman-logo {
+      width: 32px;
+      height: 32px;
+      background: var(--postman-orange);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 16px;
+      box-shadow: 0 0 12px rgba(255, 108, 55, 0.4);
+    }
+    .nav-title h1 {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+    }
+    .nav-title p {
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+    .nav-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .btn {
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+    .btn-orange {
+      background: var(--postman-orange);
+      color: white;
+    }
+    .btn-orange:hover {
+      background: var(--postman-hover);
+      box-shadow: 0 2px 8px rgba(255, 108, 55, 0.4);
+    }
+    .btn-outline {
+      background: #21262d;
+      color: var(--text-main);
+      border-color: var(--border);
+    }
+    .btn-outline:hover {
+      background: #30363d;
+      border-color: #8b949e;
+    }
+    
+    /* Hero / Summary Banner */
+    .runner-banner {
+      background: linear-gradient(180deg, #161b22 0%, #0e1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 24px 28px;
+    }
+    .runner-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .runner-title-row h2 {
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .run-status-badge {
+      background: var(--green-glow);
+      color: var(--green-light);
+      border: 1px solid var(--green-light);
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+    }
+    .kpi-card {
+      background: #161b22;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 18px;
+    }
+    .kpi-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .kpi-val {
+      font-size: 24px;
+      font-weight: 800;
+      margin-top: 4px;
+    }
+    .kpi-pass { color: #2ea043; }
+    .kpi-time { color: #a371f7; }
+    .kpi-rate { color: #388bfd; }
+    
+    /* Main Content Container */
+    .content-container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 24px 20px 80px;
+    }
+    
+    /* Instruction banner */
+    .postman-guide-box {
+      background: rgba(255, 108, 55, 0.08);
+      border: 1px solid rgba(255, 108, 55, 0.3);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .guide-text h4 {
+      color: var(--postman-orange);
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .guide-text p {
+      font-size: 12px;
+      color: #c9d1d9;
+    }
+    
+    /* Filter Bar */
+    .filter-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .filter-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .f-pill {
+      background: #21262d;
+      border: 1px solid var(--border);
+      color: var(--text-sub);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .f-pill:hover, .f-pill.active {
+      background: var(--border);
+      color: var(--text-main);
+      border-color: var(--text-sub);
+    }
+    .search-box {
+      background: #161b22;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 12px;
+      color: var(--text-main);
+      font-size: 12px;
+      width: 240px;
+    }
+    .search-box:focus {
+      outline: none;
+      border-color: var(--blue);
+    }
+    
+    /* Test Card */
+    .test-card {
+      background: #161b22;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .test-card:hover {
+      border-color: #58a6ff;
+    }
+    .card-header {
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      gap: 12px;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .tc-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-sub);
+      font-weight: 600;
+    }
+    .endpoint-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      color: #e6edf3;
+    }
+    .test-name-tag {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .auth-pill {
+      background: #21262d;
+      color: #8b949e;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .latency-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: #a371f7;
+    }
+    .pass-badge {
+      background: #238636;
+      color: white;
+      font-weight: 700;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .expand-icon {
+      color: var(--text-sub);
+      font-size: 10px;
+      transition: transform 0.2s;
+    }
+    
+    /* Card Body & Tabs */
+    .card-body {
+      border-top: 1px solid var(--border);
+      background: #0d1117;
+      padding: 16px;
+    }
+    .inner-tabs {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+    }
+    .tab-btn {
+      background: none;
+      border: none;
+      color: var(--text-sub);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .tab-btn.active {
+      background: #21262d;
+      color: var(--text-main);
+    }
+    .pane-meta {
+      display: flex;
+      gap: 20px;
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-bottom: 8px;
+    }
+    .code-block {
+      background: #161b22;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #79c0ff;
+      max-height: 260px;
+      overflow: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    
+    /* Assertions */
+    .assertion-box {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .assertion-item {
+      background: rgba(35, 134, 54, 0.1);
+      border: 1px solid rgba(46, 160, 67, 0.4);
+      border-radius: 6px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 12px;
+    }
+    .check-icon {
+      background: #238636;
+      color: white;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      margin-top: 1px;
+      flex-shrink: 0;
+    }
+    .assertion-detail {
+      color: var(--text-sub);
+      font-size: 11px;
+      margin-top: 2px;
+    }
+    
+    /* Modal / Popups for Postman guide */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-card {
+      background: #161b22;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      width: 600px;
+      max-width: 90%;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--text-sub);
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .step-item {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .step-badge {
+      background: var(--postman-orange);
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Postman Header Bar -->
+  <header class="top-nav">
+    <div class="nav-brand">
+      <div class="postman-logo"><i class="fa-solid fa-paper-plane" style="font-size:14px;"></i></div>
+      <div class="nav-title">
+        <h1>PricePilot AI — Postman Test Runner Suite</h1>
+        <p>Collection: PricePilot_AI_Auth_Postman_Collection.json (v2.1.0)</p>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <button class="btn btn-outline" onclick="openGuideModal()"><i class="fa-solid fa-circle-info"></i> How to Run in Postman App</button>
+      <a class="btn btn-outline" href="PricePilot_AI_Postman_Test_Results.xlsx" download><i class="fa-solid fa-file-excel" style="color:#10b981;"></i> Download Excel Sheet</a>
+      <a class="btn btn-outline" href="PricePilot_AI_Postman_Test_Results.csv" download><i class="fa-solid fa-file-csv" style="color:#388bfd;"></i> CSV</a>
+      <button class="btn btn-orange" onclick="window.print()"><i class="fa-solid fa-print"></i> Print / Save PDF</button>
+    </div>
+  </header>
+
+  <!-- Runner Summary Banner -->
+  <section class="runner-banner">
+    <div class="runner-title-row">
+      <div>
+        <h2>Automated Execution Telemetry Audit</h2>
+        <p style="font-size:12px; color:var(--text-sub); margin-top:2px;">
+          Environment: <strong>Local FastAPI Gateway (127.0.0.1:8000)</strong> | Test Run Time: <strong>2026-10-07 20:12:12</strong>
+        </p>
+      </div>
+      <div class="run-status-badge">
+        <i class="fa-solid fa-circle-check"></i> ALL TESTS PASSED (100%)
+      </div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Total Test Cases</div>
+        <div class="kpi-val">21</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Tests Passed</div>
+        <div class="kpi-val kpi-pass">21 / 21</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Tests Failed</div>
+        <div class="kpi-val">0</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Success Rate</div>
+        <div class="kpi-val kpi-rate">100.0%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Total Latency</div>
+        <div class="kpi-val kpi-time">765.39 ms</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="content-container">
+
+    <!-- Notice Box -->
+    <div class="postman-guide-box">
+      <div class="guide-text">
+        <h4><i class="fa-solid fa-cloud-arrow-down"></i> Postman Desktop Ready</h4>
+        <p>You have installed <strong>Postman</strong> on your Desktop. You can immediately import <code>PricePilot_AI_Auth_Postman_Collection.json</code> or inspect the full interactive response logs and Excel report below.</p>
+      </div>
+      <button class="btn btn-orange" onclick="openGuideModal()"><i class="fa-solid fa-book-open"></i> Postman 3-Step Setup</button>
+    </div>
+
+    <!-- Filter & Search Controls -->
+    <div class="filter-bar">
+      <div class="filter-pills">
+        <button class="f-pill active" onclick="filterCards('all', this)">All (21)</button>
+        <button class="f-pill" onclick="filterCards('cat-auth', this)">JWT Auth (6)</button>
+        <button class="f-pill" onclick="filterCards('cat-products', this)">Product CRUD (5)</button>
+        <button class="f-pill" onclick="filterCards('cat-rbac', this)">RBAC Guards (2)</button>
+        <button class="f-pill" onclick="filterCards('cat-catalogs', this)">Catalogs (2)</button>
+        <button class="f-pill" onclick="filterCards('cat-ml', this)">ML Optimization (1)</button>
+        <button class="f-pill" onclick="filterCards('cat-oauth', this)">OAuth 2.0 (3)</button>
+        <button class="f-pill" onclick="filterCards('cat-health', this)">Health (1)</button>
+      </div>
+      <input type="text" class="search-box" id="searchBox" placeholder="Search test name or endpoint..." oninput="searchCards(this.value)">
+    </div>
+
+    <!-- Test List -->
+    <div class="test-cards-wrapper" id="cardsList">
+      
+    <div class="test-card cat-auth" id="card-TC-01">
+      <div class="card-header" onclick="toggleDetails('TC-01')">
+        <div class="header-left">
+          <span class="tc-num">TC-01</span>
+          <span style="background:#78350f; color:#f59e0b; font-family:monospace; font-weight:700; padding:3px 8px; border-radius:4px; font-size:12px; border:1px solid #f59e0b40;">POST</span>
+          <span class="endpoint-text">/api/auth/register</span>
+          <span class="test-name-tag">Register New User</span>
+        </div>
+        <div class="header-right">
+          <span class="auth-pill">None (Public)</span>
+          <span style="background:#064e3b; color:#34d399; font-weight:700; padding:3px 10px; border-radius:12px; font-size:12px; border:1px solid #34d39950;">● 201 Created</span>
+          <span class="latency-pill">⚡ 264.62 ms</span>
+          <span class="result-badge pass-badge">PASS</span>
+          <span class="expand-icon" id="icon-TC-01">▼</span>
+        </div>
+      </div>
+      
+      <div class="card-body" id="body-TC-01" style="display:none;">
+        <div class="inner-tabs">
+          <button class="tab-btn active" onclick="switchInnerTab('TC-01', 'resp', this)">Response Body</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-01', 'req', this)">Request Details</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-01', 'test', this)">Test Script & Assertions</button>
+        </div>
+        
+        <!-- Response Pane -->
+        <div class="tab-content" id="pane-TC-01-resp">
+          <div class="pane-meta">
+            <span><strong>Status:</strong> 201</span>
+            <span><strong>Latency:</strong> 264.62 ms</span>
+            <span><strong>Content-Type:</strong> application/json</span>
+          </div>
+          <pre class="code-block"><code>{
+  &quot;access_token&quot;: &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0IiwiZW1haWwiOiJ5dXZyYWpfcG9zdG1hbl9ydW5AcHJpY2VwaWxvdC5haSIsIm5hbWUiOiJZdXZyYWogUGF0aWwiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3OTEzODQxMzIsImV4cCI6MTc5MTQ3MDUzMn0.DlZ1jlSu9CQb2ORPA71BrU25cOELyYgFJ438HkAcIA4&quot;,
+  &quot;token_type&quot;: &quot;bearer&quot;,
+  &quot;user&quot;: {
+    &quot;id&quot;: 4,
+    &quot;name&quot;: &quot;Yuvraj Patil&quot;,
+    &quot;email&quot;: &quot;yuvraj_postman_run@pricepilot.ai&quot;,
+    &quot;profile_image&quot;: null,
+    &quot;auth_provider&quot;: &quot;email&quot;,
+    &quot;provider_user_id&quot;: null,
+    &quot;role&quot;: &quot;admin&quot;,
+    &quot;permissions&quot;: [
+      &quot;dashboard&quot;,
+      &quot;product_kpis&quot;,
+      &quot;price_prediction&quot;,
+      &quot;demand_forecast&quot;,
+      &quot;ai_insights&quot;,
+      &quot;bi_report&quot;,
+      &quot;eda_charts&quot;,
+      &quot;user_management&quot;
+    ],
+    &quot;created_at&quot;: &quot;2026-10-07T14:42:12&quot;
+  },
+  &quot;message&quot;: &quot;Authentication successful&quot;
+}</code></pre>
+        </div>
+        
+        <!-- Request Pane -->
+        <div class="tab-content" id="pane-TC-01-req" style="display:none;">
+          <div class="pane-meta">
+            <span><strong>Method:</strong> POST</span>
+            <span><strong>URL:</strong> http://127.0.0.1:8000/api/auth/register</span>
+            <span><strong>Auth:</strong> None (Public)</span>
+          </div>
+          <div style="margin-top:10px; font-weight:600; font-size:12px; color:#9ca3af;">REQUEST PAYLOAD:</div>
+          <pre class="code-block"><code>{&quot;name&quot;: &quot;Yuvraj Patil&quot;, &quot;email&quot;: &quot;yuvraj_postman_run@pricepilot.ai&quot;, &quot;password&quot;: &quot;SecurePass@123&quot;, &quot;role&quot;: &quot;admin&quot;}</code></pre>
+        </div>
+        
+        <!-- Test Assertion Pane -->
+        <div class="tab-content" id="pane-TC-01-test" style="display:none;">
+          <div class="assertion-box">
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Assertion Passed:</strong> Status == 201 & access_token generated
+                <div class="assertion-detail">Expected HTTP Status 201 &rarr; Received HTTP Status 201</div>
+              </div>
+            </div>
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Postman Test Script:</strong> pm.test("Status code is 201", function () { pm.response.to.have.status(201); });
+                <div class="assertion-detail">Execution time: 264.62 ms (SLA &lt; 500 ms)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="test-card cat-auth" id="card-TC-02">
+      <div class="card-header" onclick="toggleDetails('TC-02')">
+        <div class="header-left">
+          <span class="tc-num">TC-02</span>
+          <span style="background:#78350f; color:#f59e0b; font-family:monospace; font-weight:700; padding:3px 8px; border-radius:4px; font-size:12px; border:1px solid #f59e0b40;">POST</span>
+          <span class="endpoint-text">/api/auth/login</span>
+          <span class="test-name-tag">Admin Login & Token Generation</span>
+        </div>
+        <div class="header-right">
+          <span class="auth-pill">None (Public)</span>
+          <span style="background:#064e3b; color:#34d399; font-weight:700; padding:3px 10px; border-radius:12px; font-size:12px; border:1px solid #34d39950;">● 200 OK</span>
+          <span class="latency-pill">⚡ 82.92 ms</span>
+          <span class="result-badge pass-badge">PASS</span>
+          <span class="expand-icon" id="icon-TC-02">▼</span>
+        </div>
+      </div>
+      
+      <div class="card-body" id="body-TC-02" style="display:none;">
+        <div class="inner-tabs">
+          <button class="tab-btn active" onclick="switchInnerTab('TC-02', 'resp', this)">Response Body</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-02', 'req', this)">Request Details</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-02', 'test', this)">Test Script & Assertions</button>
+        </div>
+        
+        <!-- Response Pane -->
+        <div class="tab-content" id="pane-TC-02-resp">
+          <div class="pane-meta">
+            <span><strong>Status:</strong> 200</span>
+            <span><strong>Latency:</strong> 82.92 ms</span>
+            <span><strong>Content-Type:</strong> application/json</span>
+          </div>
+          <pre class="code-block"><code>{
+  &quot;access_token&quot;: &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbkBwcmljZXBpbG90LmFpIiwibmFtZSI6IkFkbWluIFVzZXIiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3OTEzODQxMzIsImV4cCI6MTc5MTQ3MDUzMn0.Gu46N6iXsHGOpCIpe1rOZh0ZvrHixeSCTQYZDuc3doc&quot;,
+  &quot;token_type&quot;: &quot;bearer&quot;,
+  &quot;user&quot;: {
+    &quot;id&quot;: 1,
+    &quot;name&quot;: &quot;Admin User&quot;,
+    &quot;email&quot;: &quot;admin@pricepilot.ai&quot;,
+    &quot;profile_image&quot;: null,
+    &quot;auth_provider&quot;: &quot;email&quot;,
+    &quot;provider_user_id&quot;: null,
+    &quot;role&quot;: &quot;admin&quot;,
+    &quot;permissions&quot;: [
+      &quot;dashboard&quot;,
+      &quot;product_kpis&quot;,
+      &quot;price_prediction&quot;,
+      &quot;demand_forecast&quot;,
+      &quot;ai_insights&quot;,
+      &quot;bi_report&quot;,
+      &quot;eda_charts&quot;,
+      &quot;user_management&quot;
+    ],
+    &quot;created_at&quot;: &quot;2026-10-07T14:42:11&quot;
+  },
+  &quot;message&quot;: &quot;Authentication successful&quot;
+}</code></pre>
+        </div>
+        
+        <!-- Request Pane -->
+        <div class="tab-content" id="pane-TC-02-req" style="display:none;">
+          <div class="pane-meta">
+            <span><strong>Method:</strong> POST</span>
+            <span><strong>URL:</strong> http://127.0.0.1:8000/api/auth/login</span>
+            <span><strong>Auth:</strong> None (Public)</span>
+          </div>
+          <div style="margin-top:10px; font-weight:600; font-size:12px; color:#9ca3af;">REQUEST PAYLOAD:</div>
+          <pre class="code-block"><code>{&quot;email&quot;: &quot;admin@pricepilot.ai&quot;, &quot;password&quot;: &quot;Admin@123&quot;}</code></pre>
+        </div>
+        
+        <!-- Test Assertion Pane -->
+        <div class="tab-content" id="pane-TC-02-test" style="display:none;">
+          <div class="assertion-box">
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Assertion Passed:</strong> Status == 200 & role == 'admin' & JWT returned
+                <div class="assertion-detail">Expected HTTP Status 200 &rarr; Received HTTP Status 200</div>
+              </div>
+            </div>
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Postman Test Script:</strong> pm.test("Status code is 200", function () { pm.response.to.have.status(200); });
+                <div class="assertion-detail">Execution time: 82.92 ms (SLA &lt; 500 ms)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="test-card cat-auth" id="card-TC-03">
+      <div class="card-header" onclick="toggleDetails('TC-03')">
+        <div class="header-left">
+          <span class="tc-num">TC-03</span>
+          <span style="background:#78350f; color:#f59e0b; font-family:monospace; font-weight:700; padding:3px 8px; border-radius:4px; font-size:12px; border:1px solid #f59e0b40;">POST</span>
+          <span class="endpoint-text">/api/auth/login</span>
+          <span class="test-name-tag">Business Analyst Login</span>
+        </div>
+        <div class="header-right">
+          <span class="auth-pill">None (Public)</span>
+          <span style="background:#064e3b; color:#34d399; font-weight:700; padding:3px 10px; border-radius:12px; font-size:12px; border:1px solid #34d39950;">● 200 OK</span>
+          <span class="latency-pill">⚡ 82.33 ms</span>
+          <span class="result-badge pass-badge">PASS</span>
+          <span class="expand-icon" id="icon-TC-03">▼</span>
+        </div>
+      </div>
+      
+      <div class="card-body" id="body-TC-03" style="display:none;">
+        <div class="inner-tabs">
+          <button class="tab-btn active" onclick="switchInnerTab('TC-03', 'resp', this)">Response Body</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-03', 'req', this)">Request Details</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-03', 'test', this)">Test Script & Assertions</button>
+        </div>
+        
+        <!-- Response Pane -->
+        <div class="tab-content" id="pane-TC-03-resp">
+          <div class="pane-meta">
+            <span><strong>Status:</strong> 200</span>
+            <span><strong>Latency:</strong> 82.33 ms</span>
+            <span><strong>Content-Type:</strong> application/json</span>
+          </div>
+          <pre class="code-block"><code>{
+  &quot;access_token&quot;: &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZW1haWwiOiJhbmFseXN0QHByaWNlcGlsb3QuYWkiLCJuYW1lIjoiU2FyYWggQ2hlbiIsInJvbGUiOiJhbmFseXN0IiwiaWF0IjoxNzkxMzg0MTMyLCJleHAiOjE3OTE0NzA1MzJ9.WMvN5xeEEvj7FMHk2d0cDtY_YOKqAXSXugbmLDXEVdk&quot;,
+  &quot;token_type&quot;: &quot;bearer&quot;,
+  &quot;user&quot;: {
+    &quot;id&quot;: 2,
+    &quot;name&quot;: &quot;Sarah Chen&quot;,
+    &quot;email&quot;: &quot;analyst@pricepilot.ai&quot;,
+    &quot;profile_image&quot;: null,
+    &quot;auth_provider&quot;: &quot;email&quot;,
+    &quot;provider_user_id&quot;: null,
+    &quot;role&quot;: &quot;analyst&quot;,
+    &quot;permissions&quot;: [
+      &quot;dashboard&quot;,
+      &quot;product_kpis&quot;,
+      &quot;price_prediction&quot;,
+      &quot;demand_forecast&quot;,
+      &quot;ai_insights&quot;,
+      &quot;bi_report&quot;,
+      &quot;eda_charts&quot;
+    ],
+    &quot;created_at&quot;: &quot;2026-10-07T14:42:11&quot;
+  },
+  &quot;message&quot;: &quot;Authentication successful&quot;
+}</code></pre>
+        </div>
+        
+        <!-- Request Pane -->
+        <div class="tab-content" id="pane-TC-03-req" style="display:none;">
+          <div class="pane-meta">
+            <span><strong>Method:</strong> POST</span>
+            <span><strong>URL:</strong> http://127.0.0.1:8000/api/auth/login</span>
+            <span><strong>Auth:</strong> None (Public)</span>
+          </div>
+          <div style="margin-top:10px; font-weight:600; font-size:12px; color:#9ca3af;">REQUEST PAYLOAD:</div>
+          <pre class="code-block"><code>{&quot;email&quot;: &quot;analyst@pricepilot.ai&quot;, &quot;password&quot;: &quot;Analyst@123&quot;}</code></pre>
+        </div>
+        
+        <!-- Test Assertion Pane -->
+        <div class="tab-content" id="pane-TC-03-test" style="display:none;">
+          <div class="assertion-box">
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Assertion Passed:</strong> Status == 200 & role == 'analyst'
+                <div class="assertion-detail">Expected HTTP Status 200 &rarr; Received HTTP Status 200</div>
+              </div>
+            </div>
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Postman Test Script:</strong> pm.test("Status code is 200", function () { pm.response.to.have.status(200); });
+                <div class="assertion-detail">Execution time: 82.33 ms (SLA &lt; 500 ms)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="test-card cat-auth" id="card-TC-04">
+      <div class="card-header" onclick="toggleDetails('TC-04')">
+        <div class="header-left">
+          <span class="tc-num">TC-04</span>
+          <span style="background:#78350f; color:#f59e0b; font-family:monospace; font-weight:700; padding:3px 8px; border-radius:4px; font-size:12px; border:1px solid #f59e0b40;">POST</span>
+          <span class="endpoint-text">/api/auth/login</span>
+          <span class="test-name-tag">Standard User Login</span>
+        </div>
+        <div class="header-right">
+          <span class="auth-pill">None (Public)</span>
+          <span style="background:#064e3b; color:#34d399; font-weight:700; padding:3px 10px; border-radius:12px; font-size:12px; border:1px solid #34d39950;">● 200 OK</span>
+          <span class="latency-pill">⚡ 80.11 ms</span>
+          <span class="result-badge pass-badge">PASS</span>
+          <span class="expand-icon" id="icon-TC-04">▼</span>
+        </div>
+      </div>
+      
+      <div class="card-body" id="body-TC-04" style="display:none;">
+        <div class="inner-tabs">
+          <button class="tab-btn active" onclick="switchInnerTab('TC-04', 'resp', this)">Response Body</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-04', 'req', this)">Request Details</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-04', 'test', this)">Test Script & Assertions</button>
+        </div>
+        
+        <!-- Response Pane -->
+        <div class="tab-content" id="pane-TC-04-resp">
+          <div class="pane-meta">
+            <span><strong>Status:</strong> 200</span>
+            <span><strong>Latency:</strong> 80.11 ms</span>
+            <span><strong>Content-Type:</strong> application/json</span>
+          </div>
+          <pre class="code-block"><code>{
+  &quot;access_token&quot;: &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzIiwiZW1haWwiOiJ1c2VyQHByaWNlcGlsb3QuYWkiLCJuYW1lIjoiUmFqIEt1bWFyIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3OTEzODQxMzIsImV4cCI6MTc5MTQ3MDUzMn0.0qx3GwtkDm2CgiGsgOeAnr2ST7y2BDy6zQc33ZMlx2E&quot;,
+  &quot;token_type&quot;: &quot;bearer&quot;,
+  &quot;user&quot;: {
+    &quot;id&quot;: 3,
+    &quot;name&quot;: &quot;Raj Kumar&quot;,
+    &quot;email&quot;: &quot;user@pricepilot.ai&quot;,
+    &quot;profile_image&quot;: null,
+    &quot;auth_provider&quot;: &quot;email&quot;,
+    &quot;provider_user_id&quot;: null,
+    &quot;role&quot;: &quot;user&quot;,
+    &quot;permissions&quot;: [
+      &quot;dashboard&quot;,
+      &quot;product_kpis&quot;,
+      &quot;ai_insights&quot;
+    ],
+    &quot;created_at&quot;: &quot;2026-10-07T14:42:11&quot;
+  },
+  &quot;message&quot;: &quot;Authentication successful&quot;
+}</code></pre>
+        </div>
+        
+        <!-- Request Pane -->
+        <div class="tab-content" id="pane-TC-04-req" style="display:none;">
+          <div class="pane-meta">
+            <span><strong>Method:</strong> POST</span>
+            <span><strong>URL:</strong> http://127.0.0.1:8000/api/auth/login</span>
+            <span><strong>Auth:</strong> None (Public)</span>
+          </div>
+          <div style="margin-top:10px; font-weight:600; font-size:12px; color:#9ca3af;">REQUEST PAYLOAD:</div>
+          <pre class="code-block"><code>{&quot;email&quot;: &quot;user@pricepilot.ai&quot;, &quot;password&quot;: &quot;User@123&quot;}</code></pre>
+        </div>
+        
+        <!-- Test Assertion Pane -->
+        <div class="tab-content" id="pane-TC-04-test" style="display:none;">
+          <div class="assertion-box">
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Assertion Passed:</strong> Status == 200 & role == 'user'
+                <div class="assertion-detail">Expected HTTP Status 200 &rarr; Received HTTP Status 200</div>
+              </div>
+            </div>
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Postman Test Script:</strong> pm.test("Status code is 200", function () { pm.response.to.have.status(200); });
+                <div class="assertion-detail">Execution time: 80.11 ms (SLA &lt; 500 ms)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="test-card cat-auth" id="card-TC-05">
+      <div class="card-header" onclick="toggleDetails('TC-05')">
+        <div class="header-left">
+          <span class="tc-num">TC-05</span>
+          <span style="background:#064e3b; color:#10b981; font-family:monospace; font-weight:700; padding:3px 8px; border-radius:4px; font-size:12px; border:1px solid #10b98140;">GET</span>
+          <span class="endpoint-text">/api/auth/me</span>
+          <span class="test-name-tag">Get Current User Profile (Admin)</span>
+        </div>
+        <div class="header-right">
+          <span class="auth-pill">Bearer JWT</span>
+          <span style="background:#064e3b; color:#34d399; font-weight:700; padding:3px 10px; border-radius:12px; font-size:12px; border:1px solid #34d39950;">● 200 OK</span>
+          <span class="latency-pill">⚡ 12.95 ms</span>
+          <span class="result-badge pass-badge">PASS</span>
+          <span class="expand-icon" id="icon-TC-05">▼</span>
+        </div>
+      </div>
+      
+      <div class="card-body" id="body-TC-05" style="display:none;">
+        <div class="inner-tabs">
+          <button class="tab-btn active" onclick="switchInnerTab('TC-05', 'resp', this)">Response Body</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-05', 'req', this)">Request Details</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-05', 'test', this)">Test Script & Assertions</button>
+        </div>
+        
+        <!-- Response Pane -->
+        <div class="tab-content" id="pane-TC-05-resp">
+          <div class="pane-meta">
+            <span><strong>Status:</strong> 200</span>
+            <span><strong>Latency:</strong> 12.95 ms</span>
+            <span><strong>Content-Type:</strong> application/json</span>
+          </div>
+          <pre class="code-block"><code>{
+  &quot;id&quot;: 1,
+  &quot;name&quot;: &quot;Admin User&quot;,
+  &quot;email&quot;: &quot;admin@pricepilot.ai&quot;,
+  &quot;profile_image&quot;: null,
+  &quot;auth_provider&quot;: &quot;email&quot;,
+  &quot;provider_user_id&quot;: null,
+  &quot;role&quot;: &quot;admin&quot;,
+  &quot;permissions&quot;: [
+    &quot;dashboard&quot;,
+    &quot;product_kpis&quot;,
+    &quot;price_prediction&quot;,
+    &quot;demand_forecast&quot;,
+    &quot;ai_insights&quot;,
+    &quot;bi_report&quot;,
+    &quot;eda_charts&quot;,
+    &quot;user_management&quot;
+  ],
+  &quot;created_at&quot;: &quot;2026-10-07T14:42:11&quot;
+}</code></pre>
+        </div>
+        
+        <!-- Request Pane -->
+        <div class="tab-content" id="pane-TC-05-req" style="display:none;">
+          <div class="pane-meta">
+            <span><strong>Method:</strong> GET</span>
+            <span><strong>URL:</strong> http://127.0.0.1:8000/api/auth/me</span>
+            <span><strong>Auth:</strong> Bearer JWT</span>
+          </div>
+          <div style="margin-top:10px; font-weight:600; font-size:12px; color:#9ca3af;">REQUEST PAYLOAD:</div>
+          <pre class="code-block"><code>None</code></pre>
+        </div>
+        
+        <!-- Test Assertion Pane -->
+        <div class="tab-content" id="pane-TC-05-test" style="display:none;">
+          <div class="assertion-box">
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Assertion Passed:</strong> Status == 200 & user email matches admin
+                <div class="assertion-detail">Expected HTTP Status 200 &rarr; Received HTTP Status 200</div>
+              </div>
+            </div>
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Postman Test Script:</strong> pm.test("Status code is 200", function () { pm.response.to.have.status(200); });
+                <div class="assertion-detail">Execution time: 12.95 ms (SLA &lt; 500 ms)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="test-card cat-auth" id="card-TC-06">
+      <div class="card-header" onclick="toggleDetails('TC-06')">
+        <div class="header-left">
+          <span class="tc-num">TC-06</span>
+          <span style="background:#064e3b; color:#10b981; font-family:monospace; font-weight:700; padding:3px 8px; border-radius:4px; font-size:12px; border:1px solid #10b98140;">GET</span>
+          <span class="endpoint-text">/api/auth/me</span>
+          <span class="test-name-tag">Verify 401 Unauthorized Without Token</span>
+        </div>
+        <div class="header-right">
+          <span class="auth-pill">None (Public)</span>
+          <span style="background:#78350f; color:#fbbf24; font-weight:700; padding:3px 10px; border-radius:12px; font-size:12px; border:1px solid #fbbf2450;">● 401 Unauthorized</span>
+          <span class="latency-pill">⚡ 5.0 ms</span>
+          <span class="result-badge pass-badge">PASS</span>
+          <span class="expand-icon" id="icon-TC-06">▼</span>
+        </div>
+      </div>
+      
+      <div class="card-body" id="body-TC-06" style="display:none;">
+        <div class="inner-tabs">
+          <button class="tab-btn active" onclick="switchInnerTab('TC-06', 'resp', this)">Response Body</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-06', 'req', this)">Request Details</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-06', 'test', this)">Test Script & Assertions</button>
+        </div>
+        
+        <!-- Response Pane -->
+        <div class="tab-content" id="pane-TC-06-resp">
+          <div class="pane-meta">
+            <span><strong>Status:</strong> 401</span>
+            <span><strong>Latency:</strong> 5.0 ms</span>
+            <span><strong>Content-Type:</strong> application/json</span>
+          </div>
+          <pre class="code-block"><code>{
+  &quot;detail&quot;: &quot;Authentication token required. Header: Authorization: Bearer &lt;token&gt;&quot;
+}</code></pre>
+        </div>
+        
+        <!-- Request Pane -->
+        <div class="tab-content" id="pane-TC-06-req" style="display:none;">
+          <div class="pane-meta">
+            <span><strong>Method:</strong> GET</span>
+            <span><strong>URL:</strong> http://127.0.0.1:8000/api/auth/me</span>
+            <span><strong>Auth:</strong> None (Public)</span>
+          </div>
+          <div style="margin-top:10px; font-weight:600; font-size:12px; color:#9ca3af;">REQUEST PAYLOAD:</div>
+          <pre class="code-block"><code>None</code></pre>
+        </div>
+        
+        <!-- Test Assertion Pane -->
+        <div class="tab-content" id="pane-TC-06-test" style="display:none;">
+          <div class="assertion-box">
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Assertion Passed:</strong> Status == 401 & detail == 'Not authenticated'
+                <div class="assertion-detail">Expected HTTP Status 401 &rarr; Received HTTP Status 401</div>
+              </div>
+            </div>
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Postman Test Script:</strong> pm.test("Status code is 401", function () { pm.response.to.have.status(401); });
+                <div class="assertion-detail">Execution time: 5.0 ms (SLA &lt; 500 ms)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="test-card cat-products" id="card-TC-07">
+      <div class="card-header" onclick="toggleDetails('TC-07')">
+        <div class="header-left">
+          <span class="tc-num">TC-07</span>
+          <span style="background:#064e3b; color:#10b981; font-family:monospace; font-weight:700; padding:3px 8px; border-radius:4px; font-size:12px; border:1px solid #10b98140;">GET</span>
+          <span class="endpoint-text">/api/products</span>
+          <span class="test-name-tag">List All 15 Enterprise Products</span>
+        </div>
+        <div class="header-right">
+          <span class="auth-pill">Bearer JWT</span>
+          <span style="background:#064e3b; color:#34d399; font-weight:700; padding:3px 10px; border-radius:12px; font-size:12px; border:1px solid #34d39950;">● 200 OK</span>
+          <span class="latency-pill">⚡ 8.54 ms</span>
+          <span class="result-badge pass-badge">PASS</span>
+          <span class="expand-icon" id="icon-TC-07">▼</span>
+        </div>
+      </div>
+      
+      <div class="card-body" id="body-TC-07" style="display:none;">
+        <div class="inner-tabs">
+          <button class="tab-btn active" onclick="switchInnerTab('TC-07', 'resp', this)">Response Body</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-07', 'req', this)">Request Details</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-07', 'test', this)">Test Script & Assertions</button>
+        </div>
+        
+        <!-- Response Pane -->
+        <div class="tab-content" id="pane-TC-07-resp">
+          <div class="pane-meta">
+            <span><strong>Status:</strong> 200</span>
+            <span><strong>Latency:</strong> 8.54 ms</span>
+            <span><strong>Content-Type:</strong> application/json</span>
+          </div>
+          <pre class="code-block"><code>{
+  &quot;status&quot;: &quot;success&quot;,
+  &quot;accessed_by&quot;: &quot;admin@pricepilot.ai&quot;,
+  &quot;user_role&quot;: &quot;admin&quot;,
+  &quot;count&quot;: 15,
+  &quot;total_revenue&quot;: 21559000.0,
+  &quot;average_margin_pct&quot;: 55.48,
+  &quot;products&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;name&quot;: &quot;UltraView 4K Monitor&quot;,
+      &quot;category&quot;: &quot;Electronics&quot;,
+      &quot;price&quot;: 245.5,
+      &quot;cost&quot;: 137.0,
+      &quot;competitor_1&quot;: 265.0,
+      &quot;competitor_2&quot;: 258.0,
+      &quot;competitor_3&quot;: 253.7,
+      &quot;competitor_avg&quot;: 258.9,
+      &quot;margin_pct&quot;: 44.2,
+      &quot;daily_demand&quot;: 38.2,
+      &quot;stock&quot;: 550,
+      &quot;sales_channel&quot;: &quot;Direct Web&quot;,
+      &quot;rating&quot;: 4.7,
+      &quot;annual_revenue&quot;: 3390000.0,
+      &quot;status&quot;: &quot;Optimal&quot;
+    },
+    {
+      &quot;id&quot;: 2,
+      &quot;name&quot;: &quot;Aura Pro Headphones&quot;,
+      &quot;category&quot;: &quot;Electronics&quot;,
+      &quot;price&quot;: 187.5,
+      &quot;cost&quot;: 110.5,
+      &quot;competitor_1&quot;: 199.9,
+      &quot;competitor_2&quot;: 195.0,
+      &quot;competitor_3&quot;: 194.3,
+      &quot;competitor_avg&quot;: 196.43,
+      &quot;margin_pct&quot;: 41.1,
+      &quot;daily_demand&quot;: 40.7,
+      &quot;stock&quot;: 650,
+      &quot;sales_channel&quot;: &quot;Mobile App&quot;,
+      &quot;rating&quot;: 4.6,
+      &quot;annual_revenue&quot;: 2790000.0,
+      &quot;status&quot;: &quot;Raise Price&quot;
+    },
+    {
+      &quot;id&quot;: 3,
+      &quot;name&quot;: &quot;SmartHome Hub Pro&quot;,
+      &quot;category&quot;: &quot;Electronics&quot;,
+      &quot;price&quot;: 132.0,
+      &quot;cost&quot;: 63.0,
+      &quot;competitor_1&quot;: 141.0,
+      &quot;competitor_2&quot;: 138.0,
+      &quot;competitor_3&quot;: 136.5,
+      &quot;competitor_avg&quot;: 138.5,
+      &quot;margin_pct&quot;: 52.3,
+      &quot;daily_demand&quot;: 35.1,
+      &quot;stock&quot;: 420,
+      &quot;sales_channel&quot;: &quot;Amazon&quot;,
+      &quot;rating&quot;: 4.5,
+      &quot;annual_revenue&quot;: 1690000.0,
+      &quot;status&quot;: &quot;Optimal&quot;
+    },
+    {
+      &quot;id&quot;: 4,
+      &quot;name&quot;: &quot;ThermoComfort Cooler&quot;,
+      &quot;category&quot;: &quot;Electronics&quot;,
+      &quot;price&quot;: 89.99,
+      &quot;cost&quot;: 46.1,
+      &quot;competitor_1&quot;: 96.0,
+      &quot;competitor_2&quot;: 94.0,
+      &quot;competitor_3&quot;: 92.6,
+      &quot;competitor_avg&quot;: 94.2,
+      &quot;margin_pct&quot;: 48.7,
+      &quot;daily_demand&quot;: 42.0,
+      &quot;stock&quot;: 780,
+      &quot;sales_channel&quot;: &quot;Direct Web&quot;,
+      &quot;rating&quot;: 4.4,
+      &quot;annual_revenue&quot;: 1380000.0,
+      &quot;status&quot;: &quot;Optimal&quot;
+    },
+    {
+      &quot;id&quot;: 5,
+      &quot;name&quot;: &quot;LuxeDream Mattress&quot;,
+      &quot;category&quot;: &quot;Home &amp; Kitchen&quot;,
+      &quot;price&quot;: 189.0,
+      &quot;cost&quot;: 84.8,
+      &quot;competitor_1&quot;: 202.0,
+      &quot;competitor_2&quot;: 199.0,
+      &quot;competitor_3&quot;: 195.3,
+      &quot;competitor_avg&quot;: 198.75,
+      &quot;margin_pct&quot;: 55.2,
+      &quot;daily_demand&quot;: 28.4,
+      &quot;stock&quot;: 310,
+      &quot;sales_channel&quot;: &quot;Direct Web&quot;,
+      &quot;rating&quot;: 4.8,
+      &quot;annual_revenue&quot;: 1960000.0,
+      &quot;status&quot;: &quot;Raise Price&quot;
+    },
+    {
+      &quot;id&quot;: 6,
+      &quot;name&quot;: &quot;ChefMaster Blender&quot;,
+      &quot;category&quot;: &quot;Home &amp; Kitchen&quot;,
+      &quot;price&quot;: 98.5,
+      &quot;cost&quot;: 46.2,
+      &quot;competitor_1&quot;: 105.0,
+      &quot;competitor_2&quot;: 103.0,
+      &quot;competitor_3&quot;: 101.6,
+      &quot;competitor_avg&quot;: 103.2,
+      &quot;margin_pct&quot;: 53.1,
+      &quot;daily_demand&quot;: 37.6,
+      &quot;stock&quot;: 490,
+      &quot;sales_channel&quot;: &quot;Amazon&quot;,
+      &quot;rating&quot;: 4.6,
+      &quot;annual_revenue&quot;: 1350000.0,
+      &quot;status&quot;: &quot;Optimal&quot;
+    },
+    {
+      &quot;id&quot;: 7,
+      &quot;name&quot;: &quot;AquaPure Filter&quot;,
+      &quot;category&quot;: &quot;Home &amp; Kitchen&quot;,
+      &quot;price&quot;: 67.0,
+      &quot;cost&quot;: 27.8,
+      &quot;competitor_1&quot;: 73.0,
+      &quot;competitor_2&quot;: 72.0,
+      &quot;competitor_3&quot;: 70.4,
+      &quot;competitor_avg&quot;: 71.8,
+      &quot;margin_pct&quot;: 58.4,
+      &quot;daily_demand&quot;: 44.2,
+      &quot;stock&quot;: 610,
+      &quot;sales_channel&quot;: &quot;Direct Web&quot;,
+      &quot;rating&quot;: 4.5,
+      &quot;annual_revenue&quot;: 1080000.0,
+      &quot;status&quot;: &quot;Optimal&quot;
+    },
+    {
+      &quot;id&quot;: 8,
+      &quot;name&quot;: &quot;FlexFit Yoga Mat&quot;,
+      &quot;category&quot;: &quot;Sports &amp; Outdoors&quot;,
+      &quot;price&quot;: 45.0,
+      &quot;cost&quot;: 18.0,
+      &quot;competitor_1&quot;: 50.0,
+      &quot;competitor_2&quot;: 49.0,
+      &quot;competitor_3&quot;: 47.7,
+      &quot;competitor_avg&quot;: 48.9,
+      &quot;margin_pct&quot;: 60.0,
+      &quot;daily_demand&quot;: 49.8,
+      &quot;stock&quot;: 850,
+      &quot;sales_channel&quot;: &quot;Mobile App&quot;,
+      &quot;rating&quot;: 4.7,
+      &quot;annual_revenue&quot;: 820000.0,
+      &quot;status&quot;: &quot;Optimal&quot;
+    },
+    {
+      &quot;id&quot;: 9,
+      &quot;name&quot;: &quot;ProRunner Shoes&quot;,
+      &quot;category&quot;: &quot;Sports &amp; Outdoors&quot;,
+      &quot;price&quot;: 142.0,
+      &quot;cost&quot;: 75.0,
+      &quot;competitor_1&quot;: 152.0,
+      &quot;competitor_2&quot;: 150.0,
+      &quot;competitor_3&quot;: 146.5,
+      &quot;competitor_avg&quot;: 149.5,
+      &quot;margin_pct&quot;: 47.2,
+      &quot;daily_demand&quot;: 33.9,
+      &quot;stock&quot;: 430,
+      &quot;sales_channel&quot;: &quot;Direct Web&quot;,
+      &quot;rating&quot;: 4.5,
+      &quot;annual_revenue&quot;: 1760000.0,
+      &quot;status&quot;: &quot;Raise Price&quot;
+    },
+    {
+      &quot;id&quot;: 10,
+      &quot;name&quot;: &quot;HydroPeak Bottle&quot;,
+      &quot;category&quot;: &quot;Sports &amp; Outdoors&quot;,
+      &quot;price&quot;: 35.0,
+      &quot;cost&quot;: 12.0,
+      &quot;competitor_1&quot;: 38.5,
+      &quot;competitor_2&quot;: 37.9,
+      &quot;competitor_3&quot;: 37.0,
+      &quot;competitor_avg&quot;: 37.8,
+      &quot;margin_pct&quot;: 65.7,
+      &quot;daily_demand&quot;: 58.3,
+      &quot;stock&quot;: 940,
+      &quot;sales_channel&quot;: &quot;Amazon&quot;,
+      &quot;rating&quot;: 4.8,
+      &quot;annual_revenue&quot;: 745000.0,
+      &quot;status&quot;: &quot;Optimal&quot;
+    },
+    {
+      &quot;id&quot;: 11,
+      &quot;name&quot;: &quot;UrbanEdge Jacket&quot;,
+      &quot;category&quot;: &quot;Apparel&quot;,
+      &quot;price&quot;: 89.0,
+      &quot;cost&quot;: 38.0,
+      &quot;competitor_1&quot;: 95.0,
+      &quot;competitor_2&quot;: 93.5,
+      &quot;competitor_3&quot;: 91.7,
+      &quot;competitor_avg&quot;: 93.4,
+      &quot;margin_pct&quot;: 57.3,
+      &quot;daily_demand&quot;: 43.7,
+      &quot;stock&quot;: 520,
+      &quot;sales_channel&quot;: &quot;Mobile App&quot;,
+      &quot;rating&quot;: 4.4,
+      &quot;annual_revenue&quot;: 1420000.0,
+      &quot;status&quot;: &quot;Optimal&quot;
+    },
+    {
+      &quot;id&quot;: 12,
+      &quot;name&quot;: &quot;ClassicFit Jeans&quot;,
+      &quot;category&quot;: &quot;Apparel&quot;,
+      &quot;price&quot;: 68.0,
+      &quot;cost&quot;: 30.0,
+      &quot;competitor_1&quot;: 72.5,
+      &quot;competitor_2&quot;: 71.0,
+      &quot;competitor_3&quot;: 70.1,
+      &quot;competitor_avg&quot;: 71.2,
+      &quot;margin_pct&quot;: 55.9,
+      &quot;daily_demand&quot;: 46.2,
+      &quot;stock&quot;: 580,
+      &quot;sales_channel&quot;: &quot;Direct Web&quot;,
+      &quot;rating&quot;: 4.3,
+      &quot;annual_revenue&quot;: 1150000.0,
+      &quot;status&quot;: &quot;Optimal&quot;
+    },
+    {
+      &quot;id&quot;: 13,
+      &quot;name&quot;: &quot;GlowUp Serum&quot;,
+      &quot;category&quot;: &quot;Health &amp; Beauty&quot;,
+      &quot;price&quot;: 55.0,
+      &quot;cost&quot;: 19.5,
+      &quot;competitor_1&quot;: 58.5,
+      &quot;competitor_2&quot;: 57.5,
+      &quot;competitor_3&quot;: 56.5,
+      &quot;competitor_avg&quot;: 57.5,
+      &quot;margin_pct&quot;: 64.5,
+      &quot;daily_demand&quot;: 41.5,
+      &quot;stock&quot;: 670,
+      &quot;sales_channel&quot;: &quot;Direct Web&quot;,
+      &quot;rating&quot;: 4.6,
+      &quot;annual_revenue&quot;: 834000.0,
+      &quot;status&quot;: &quot;Optimal&quot;
+    },
+    {
+      &quot;id&quot;: 14,
+      &quot;name&quot;: &quot;VitalBoost Vitamins&quot;,
+      &quot;category&quot;: &quot;Health &amp; Beauty&quot;,
+      &quot;price&quot;: 38.0,
+      &quot;cost&quot;: 12.0,
+      &quot;competitor_1&quot;: 41.0,
+      &quot;competitor_2&quot;: 40.5,
+      &quot;competitor_3&quot;: 39.1,
+      &quot;competitor_avg&quot;: 40.2,
+      &quot;margin_pct&quot;: 68.4,
+      &quot;daily_demand&quot;: 52.7,
+      &quot;stock&quot;: 790,
+      &quot;sales_channel&quot;: &quot;Amazon&quot;,
+      &quot;rating&quot;: 4.7,
+      &quot;annual_revenue&quot;: 732000.0,
+      &quot;status&quot;: &quot;Optimal&quot;
+    },
+    {
+      &quot;id&quot;: 15,
+      &quot;name&quot;: &quot;ZenAroma Diffuser&quot;,
+      &quot;category&quot;: &quot;Health &amp; Beauty&quot;,
+      &quot;price&quot;: 28.0,
+      &quot;cost&quot;: 11.2,
+      &quot;competitor_1&quot;: 30.5,
+      &quot;competitor_2&quot;: 29.9,
+      &quot;competitor_3&quot;: 29.0,
+      &quot;competitor_avg&quot;: 29.8,
+      &quot;margin_pct&quot;: 60.2,
+      &quot;daily_demand&quot;: 44.8,
+      &quot;stock&quot;: 480,
+      &quot;sales_channel&quot;: &quot;Mobile App&quot;,
+      &quot;rating&quot;: 4.5,
+      &quot;annual_revenue&quot;: 458000.0,
+      &quot;status&quot;: &quot;Optimal&quot;
+    }
+  ]
+}</code></pre>
+        </div>
+        
+        <!-- Request Pane -->
+        <div class="tab-content" id="pane-TC-07-req" style="display:none;">
+          <div class="pane-meta">
+            <span><strong>Method:</strong> GET</span>
+            <span><strong>URL:</strong> http://127.0.0.1:8000/api/products</span>
+            <span><strong>Auth:</strong> Bearer JWT</span>
+          </div>
+          <div style="margin-top:10px; font-weight:600; font-size:12px; color:#9ca3af;">REQUEST PAYLOAD:</div>
+          <pre class="code-block"><code>None</code></pre>
+        </div>
+        
+        <!-- Test Assertion Pane -->
+        <div class="tab-content" id="pane-TC-07-test" style="display:none;">
+          <div class="assertion-box">
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Assertion Passed:</strong> Status == 200 & product count == 15 & total_revenue present
+                <div class="assertion-detail">Expected HTTP Status 200 &rarr; Received HTTP Status 200</div>
+              </div>
+            </div>
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Postman Test Script:</strong> pm.test("Status code is 200", function () { pm.response.to.have.status(200); });
+                <div class="assertion-detail">Execution time: 8.54 ms (SLA &lt; 500 ms)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="test-card cat-products" id="card-TC-08">
+      <div class="card-header" onclick="toggleDetails('TC-08')">
+        <div class="header-left">
+          <span class="tc-num">TC-08</span>
+          <span style="background:#064e3b; color:#10b981; font-family:monospace; font-weight:700; padding:3px 8px; border-radius:4px; font-size:12px; border:1px solid #10b98140;">GET</span>
+          <span class="endpoint-text">/api/products?category=Electronics</span>
+          <span class="test-name-tag">Filter Products by Category (Electronics)</span>
+        </div>
+        <div class="header-right">
+          <span class="auth-pill">Bearer JWT</span>
+          <span style="background:#064e3b; color:#34d399; font-weight:700; padding:3px 10px; border-radius:12px; font-size:12px; border:1px solid #34d39950;">● 200 OK</span>
+          <span class="latency-pill">⚡ 9.4 ms</span>
+          <span class="result-badge pass-badge">PASS</span>
+          <span class="expand-icon" id="icon-TC-08">▼</span>
+        </div>
+      </div>
+      
+      <div class="card-body" id="body-TC-08" style="display:none;">
+        <div class="inner-tabs">
+          <button class="tab-btn active" onclick="switchInnerTab('TC-08', 'resp', this)">Response Body</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-08', 'req', this)">Request Details</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-08', 'test', this)">Test Script & Assertions</button>
+        </div>
+        
+        <!-- Response Pane -->
+        <div class="tab-content" id="pane-TC-08-resp">
+          <div class="pane-meta">
+            <span><strong>Status:</strong> 200</span>
+            <span><strong>Latency:</strong> 9.4 ms</span>
+            <span><strong>Content-Type:</strong> application/json</span>
+          </div>
+          <pre class="code-block"><code>{
+  &quot;status&quot;: &quot;success&quot;,
+  &quot;accessed_by&quot;: &quot;admin@pricepilot.ai&quot;,
+  &quot;user_role&quot;: &quot;admin&quot;,
+  &quot;count&quot;: 4,
+  &quot;total_revenue&quot;: 21559000.0,
+  &quot;average_margin_pct&quot;: 55.48,
+  &quot;products&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;name&quot;: &quot;UltraView 4K Monitor&quot;,
+      &quot;category&quot;: &quot;Electronics&quot;,
+      &quot;price&quot;: 245.5,
+      &quot;cost&quot;: 137.0,
+      &quot;competitor_1&quot;: 265.0,
+      &quot;competitor_2&quot;: 258.0,
+      &quot;competitor_3&quot;: 253.7,
+      &quot;competitor_avg&quot;: 258.9,
+      &quot;margin_pct&quot;: 44.2,
+      &quot;daily_demand&quot;: 38.2,
+      &quot;stock&quot;: 550,
+      &quot;sales_channel&quot;: &quot;Direct Web&quot;,
+      &quot;rating&quot;: 4.7,
+      &quot;annual_revenue&quot;: 3390000.0,
+      &quot;status&quot;: &quot;Optimal&quot;
+    },
+    {
+      &quot;id&quot;: 2,
+      &quot;name&quot;: &quot;Aura Pro Headphones&quot;,
+      &quot;category&quot;: &quot;Electronics&quot;,
+      &quot;price&quot;: 187.5,
+      &quot;cost&quot;: 110.5,
+      &quot;competitor_1&quot;: 199.9,
+      &quot;competitor_2&quot;: 195.0,
+      &quot;competitor_3&quot;: 194.3,
+      &quot;competitor_avg&quot;: 196.43,
+      &quot;margin_pct&quot;: 41.1,
+      &quot;daily_demand&quot;: 40.7,
+      &quot;stock&quot;: 650,
+      &quot;sales_channel&quot;: &quot;Mobile App&quot;,
+      &quot;rating&quot;: 4.6,
+      &quot;annual_revenue&quot;: 2790000.0,
+      &quot;status&quot;: &quot;Raise Price&quot;
+    },
+    {
+      &quot;id&quot;: 3,
+      &quot;name&quot;: &quot;SmartHome Hub Pro&quot;,
+      &quot;category&quot;: &quot;Electronics&quot;,
+      &quot;price&quot;: 132.0,
+      &quot;cost&quot;: 63.0,
+      &quot;competitor_1&quot;: 141.0,
+      &quot;competitor_2&quot;: 138.0,
+      &quot;competitor_3&quot;: 136.5,
+      &quot;competitor_avg&quot;: 138.5,
+      &quot;margin_pct&quot;: 52.3,
+      &quot;daily_demand&quot;: 35.1,
+      &quot;stock&quot;: 420,
+      &quot;sales_channel&quot;: &quot;Amazon&quot;,
+      &quot;rating&quot;: 4.5,
+      &quot;annual_revenue&quot;: 1690000.0,
+      &quot;status&quot;: &quot;Optimal&quot;
+    },
+    {
+      &quot;id&quot;: 4,
+      &quot;name&quot;: &quot;ThermoComfort Cooler&quot;,
+      &quot;category&quot;: &quot;Electronics&quot;,
+      &quot;price&quot;: 89.99,
+      &quot;cost&quot;: 46.1,
+      &quot;competitor_1&quot;: 96.0,
+      &quot;competitor_2&quot;: 94.0,
+      &quot;competitor_3&quot;: 92.6,
+      &quot;competitor_avg&quot;: 94.2,
+      &quot;margin_pct&quot;: 48.7,
+      &quot;daily_demand&quot;: 42.0,
+      &quot;stock&quot;: 780,
+      &quot;sales_channel&quot;: &quot;Direct Web&quot;,
+      &quot;rating&quot;: 4.4,
+      &quot;annual_revenue&quot;: 1380000.0,
+      &quot;status&quot;: &quot;Optimal&quot;
+    }
+  ]
+}</code></pre>
+        </div>
+        
+        <!-- Request Pane -->
+        <div class="tab-content" id="pane-TC-08-req" style="display:none;">
+          <div class="pane-meta">
+            <span><strong>Method:</strong> GET</span>
+            <span><strong>URL:</strong> http://127.0.0.1:8000/api/products?category=Electronics</span>
+            <span><strong>Auth:</strong> Bearer JWT</span>
+          </div>
+          <div style="margin-top:10px; font-weight:600; font-size:12px; color:#9ca3af;">REQUEST PAYLOAD:</div>
+          <pre class="code-block"><code>None</code></pre>
+        </div>
+        
+        <!-- Test Assertion Pane -->
+        <div class="tab-content" id="pane-TC-08-test" style="display:none;">
+          <div class="assertion-box">
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Assertion Passed:</strong> Status == 200 & all returned items category == 'Electronics'
+                <div class="assertion-detail">Expected HTTP Status 200 &rarr; Received HTTP Status 200</div>
+              </div>
+            </div>
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Postman Test Script:</strong> pm.test("Status code is 200", function () { pm.response.to.have.status(200); });
+                <div class="assertion-detail">Execution time: 9.4 ms (SLA &lt; 500 ms)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="test-card cat-products" id="card-TC-09">
+      <div class="card-header" onclick="toggleDetails('TC-09')">
+        <div class="header-left">
+          <span class="tc-num">TC-09</span>
+          <span style="background:#064e3b; color:#10b981; font-family:monospace; font-weight:700; padding:3px 8px; border-radius:4px; font-size:12px; border:1px solid #10b98140;">GET</span>
+          <span class="endpoint-text">/api/products/1</span>
+          <span class="test-name-tag">Get Complete Single Product Details (10+ Attributes)</span>
+        </div>
+        <div class="header-right">
+          <span class="auth-pill">Bearer JWT</span>
+          <span style="background:#064e3b; color:#34d399; font-weight:700; padding:3px 10px; border-radius:12px; font-size:12px; border:1px solid #34d39950;">● 200 OK</span>
+          <span class="latency-pill">⚡ 64.04 ms</span>
+          <span class="result-badge pass-badge">PASS</span>
+          <span class="expand-icon" id="icon-TC-09">▼</span>
+        </div>
+      </div>
+      
+      <div class="card-body" id="body-TC-09" style="display:none;">
+        <div class="inner-tabs">
+          <button class="tab-btn active" onclick="switchInnerTab('TC-09', 'resp', this)">Response Body</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-09', 'req', this)">Request Details</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-09', 'test', this)">Test Script & Assertions</button>
+        </div>
+        
+        <!-- Response Pane -->
+        <div class="tab-content" id="pane-TC-09-resp">
+          <div class="pane-meta">
+            <span><strong>Status:</strong> 200</span>
+            <span><strong>Latency:</strong> 64.04 ms</span>
+            <span><strong>Content-Type:</strong> application/json</span>
+          </div>
+          <pre class="code-block"><code>{
+  &quot;id&quot;: 1,
+  &quot;name&quot;: &quot;UltraView 4K Monitor&quot;,
+  &quot;category&quot;: &quot;Electronics&quot;,
+  &quot;price&quot;: 245.5,
+  &quot;cost&quot;: 137.0,
+  &quot;competitor_1&quot;: 265.0,
+  &quot;competitor_2&quot;: 258.0,
+  &quot;competitor_3&quot;: 253.7,
+  &quot;competitor_avg&quot;: 258.9,
+  &quot;margin_pct&quot;: 44.2,
+  &quot;daily_demand&quot;: 38.2,
+  &quot;stock&quot;: 550,
+  &quot;sales_channel&quot;: &quot;Direct Web&quot;,
+  &quot;rating&quot;: 4.7,
+  &quot;annual_revenue&quot;: 3390000.0,
+  &quot;status&quot;: &quot;Optimal&quot;
+}</code></pre>
+        </div>
+        
+        <!-- Request Pane -->
+        <div class="tab-content" id="pane-TC-09-req" style="display:none;">
+          <div class="pane-meta">
+            <span><strong>Method:</strong> GET</span>
+            <span><strong>URL:</strong> http://127.0.0.1:8000/api/products/1</span>
+            <span><strong>Auth:</strong> Bearer JWT</span>
+          </div>
+          <div style="margin-top:10px; font-weight:600; font-size:12px; color:#9ca3af;">REQUEST PAYLOAD:</div>
+          <pre class="code-block"><code>None</code></pre>
+        </div>
+        
+        <!-- Test Assertion Pane -->
+        <div class="tab-content" id="pane-TC-09-test" style="display:none;">
+          <div class="assertion-box">
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Assertion Passed:</strong> Status == 200 & contains price, cost, competitor_avg, margin_pct, stock, demand
+                <div class="assertion-detail">Expected HTTP Status 200 &rarr; Received HTTP Status 200</div>
+              </div>
+            </div>
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Postman Test Script:</strong> pm.test("Status code is 200", function () { pm.response.to.have.status(200); });
+                <div class="assertion-detail">Execution time: 64.04 ms (SLA &lt; 500 ms)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="test-card cat-products" id="card-TC-10">
+      <div class="card-header" onclick="toggleDetails('TC-10')">
+        <div class="header-left">
+          <span class="tc-num">TC-10</span>
+          <span style="background:#78350f; color:#f59e0b; font-family:monospace; font-weight:700; padding:3px 8px; border-radius:4px; font-size:12px; border:1px solid #f59e0b40;">POST</span>
+          <span class="endpoint-text">/api/products</span>
+          <span class="test-name-tag">Create New Product with Competitor Benchmarks (Admin)</span>
+        </div>
+        <div class="header-right">
+          <span class="auth-pill">Bearer JWT</span>
+          <span style="background:#064e3b; color:#34d399; font-weight:700; padding:3px 10px; border-radius:12px; font-size:12px; border:1px solid #34d39950;">● 201 Created</span>
+          <span class="latency-pill">⚡ 8.06 ms</span>
+          <span class="result-badge pass-badge">PASS</span>
+          <span class="expand-icon" id="icon-TC-10">▼</span>
+        </div>
+      </div>
+      
+      <div class="card-body" id="body-TC-10" style="display:none;">
+        <div class="inner-tabs">
+          <button class="tab-btn active" onclick="switchInnerTab('TC-10', 'resp', this)">Response Body</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-10', 'req', this)">Request Details</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-10', 'test', this)">Test Script & Assertions</button>
+        </div>
+        
+        <!-- Response Pane -->
+        <div class="tab-content" id="pane-TC-10-resp">
+          <div class="pane-meta">
+            <span><strong>Status:</strong> 201</span>
+            <span><strong>Latency:</strong> 8.06 ms</span>
+            <span><strong>Content-Type:</strong> application/json</span>
+          </div>
+          <pre class="code-block"><code>{
+  &quot;id&quot;: 16,
+  &quot;name&quot;: &quot;SmartWatch Apex Ultra&quot;,
+  &quot;category&quot;: &quot;Electronics&quot;,
+  &quot;price&quot;: 299.99,
+  &quot;cost&quot;: 145.0,
+  &quot;competitor_1&quot;: 310.0,
+  &quot;competitor_2&quot;: 305.0,
+  &quot;competitor_3&quot;: 295.0,
+  &quot;competitor_avg&quot;: 303.33,
+  &quot;margin_pct&quot;: 51.67,
+  &quot;daily_demand&quot;: 25.0,
+  &quot;stock&quot;: 600,
+  &quot;sales_channel&quot;: &quot;Direct Web&quot;,
+  &quot;rating&quot;: 4.8,
+  &quot;annual_revenue&quot;: 2737408.75,
+  &quot;status&quot;: &quot;Optimal&quot;
+}</code></pre>
+        </div>
+        
+        <!-- Request Pane -->
+        <div class="tab-content" id="pane-TC-10-req" style="display:none;">
+          <div class="pane-meta">
+            <span><strong>Method:</strong> POST</span>
+            <span><strong>URL:</strong> http://127.0.0.1:8000/api/products</span>
+            <span><strong>Auth:</strong> Bearer JWT</span>
+          </div>
+          <div style="margin-top:10px; font-weight:600; font-size:12px; color:#9ca3af;">REQUEST PAYLOAD:</div>
+          <pre class="code-block"><code>{&quot;name&quot;: &quot;SmartWatch Apex Ultra&quot;, &quot;category&quot;: &quot;Electronics&quot;, &quot;price&quot;: 299.99, &quot;cost&quot;: 145.0, &quot;competitor_1&quot;: 310.0, &quot;competitor_2&quot;: 305.0, &quot;competitor_3&quot;: 295.0, &quot;daily_demand&quot;: 25.0, &quot;stock&quot;: 600, &quot;sales_channel&quot;: &quot;Direct Web&quot;, &quot;rating&quot;: 4.8, &quot;status&quot;: &quot;Optimal&quot;}</code></pre>
+        </div>
+        
+        <!-- Test Assertion Pane -->
+        <div class="tab-content" id="pane-TC-10-test" style="display:none;">
+          <div class="assertion-box">
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Assertion Passed:</strong> Status == 201 & ID generated & margin_pct auto-calculated
+                <div class="assertion-detail">Expected HTTP Status 201 &rarr; Received HTTP Status 201</div>
+              </div>
+            </div>
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Postman Test Script:</strong> pm.test("Status code is 201", function () { pm.response.to.have.status(201); });
+                <div class="assertion-detail">Execution time: 8.06 ms (SLA &lt; 500 ms)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="test-card cat-rbac" id="card-TC-11">
+      <div class="card-header" onclick="toggleDetails('TC-11')">
+        <div class="header-left">
+          <span class="tc-num">TC-11</span>
+          <span style="background:#78350f; color:#f59e0b; font-family:monospace; font-weight:700; padding:3px 8px; border-radius:4px; font-size:12px; border:1px solid #f59e0b40;">POST</span>
+          <span class="endpoint-text">/api/products</span>
+          <span class="test-name-tag">RBAC Guard: Prevent Standard User from Adding Product</span>
+        </div>
+        <div class="header-right">
+          <span class="auth-pill">Bearer JWT</span>
+          <span style="background:#78350f; color:#fbbf24; font-weight:700; padding:3px 10px; border-radius:12px; font-size:12px; border:1px solid #fbbf2450;">● 403 Forbidden</span>
+          <span class="latency-pill">⚡ 8.18 ms</span>
+          <span class="result-badge pass-badge">PASS</span>
+          <span class="expand-icon" id="icon-TC-11">▼</span>
+        </div>
+      </div>
+      
+      <div class="card-body" id="body-TC-11" style="display:none;">
+        <div class="inner-tabs">
+          <button class="tab-btn active" onclick="switchInnerTab('TC-11', 'resp', this)">Response Body</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-11', 'req', this)">Request Details</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-11', 'test', this)">Test Script & Assertions</button>
+        </div>
+        
+        <!-- Response Pane -->
+        <div class="tab-content" id="pane-TC-11-resp">
+          <div class="pane-meta">
+            <span><strong>Status:</strong> 403</span>
+            <span><strong>Latency:</strong> 8.18 ms</span>
+            <span><strong>Content-Type:</strong> application/json</span>
+          </div>
+          <pre class="code-block"><code>{
+  &quot;detail&quot;: &quot;Access denied. Only Administrators have permission to add new products to the catalog.&quot;
+}</code></pre>
+        </div>
+        
+        <!-- Request Pane -->
+        <div class="tab-content" id="pane-TC-11-req" style="display:none;">
+          <div class="pane-meta">
+            <span><strong>Method:</strong> POST</span>
+            <span><strong>URL:</strong> http://127.0.0.1:8000/api/products</span>
+            <span><strong>Auth:</strong> Bearer JWT</span>
+          </div>
+          <div style="margin-top:10px; font-weight:600; font-size:12px; color:#9ca3af;">REQUEST PAYLOAD:</div>
+          <pre class="code-block"><code>{&quot;name&quot;: &quot;Unauthorized Rogue Product&quot;, &quot;category&quot;: &quot;Electronics&quot;, &quot;price&quot;: 49.99, &quot;cost&quot;: 20.0}</code></pre>
+        </div>
+        
+        <!-- Test Assertion Pane -->
+        <div class="tab-content" id="pane-TC-11-test" style="display:none;">
+          <div class="assertion-box">
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Assertion Passed:</strong> Status == 403 Forbidden & detail contains 'Admin access required'
+                <div class="assertion-detail">Expected HTTP Status 403 &rarr; Received HTTP Status 403</div>
+              </div>
+            </div>
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Postman Test Script:</strong> pm.test("Status code is 403", function () { pm.response.to.have.status(403); });
+                <div class="assertion-detail">Execution time: 8.18 ms (SLA &lt; 500 ms)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="test-card cat-products" id="card-TC-12">
+      <div class="card-header" onclick="toggleDetails('TC-12')">
+        <div class="header-left">
+          <span class="tc-num">TC-12</span>
+          <span style="background:#1e3a8a; color:#3b82f6; font-family:monospace; font-weight:700; padding:3px 8px; border-radius:4px; font-size:12px; border:1px solid #3b82f640;">PUT</span>
+          <span class="endpoint-text">/api/products/1</span>
+          <span class="test-name-tag">Update Product Pricing & Rating (Admin)</span>
+        </div>
+        <div class="header-right">
+          <span class="auth-pill">Bearer JWT</span>
+          <span style="background:#064e3b; color:#34d399; font-weight:700; padding:3px 10px; border-radius:12px; font-size:12px; border:1px solid #34d39950;">● 200 OK</span>
+          <span class="latency-pill">⚡ 8.4 ms</span>
+          <span class="result-badge pass-badge">PASS</span>
+          <span class="expand-icon" id="icon-TC-12">▼</span>
+        </div>
+      </div>
+      
+      <div class="card-body" id="body-TC-12" style="display:none;">
+        <div class="inner-tabs">
+          <button class="tab-btn active" onclick="switchInnerTab('TC-12', 'resp', this)">Response Body</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-12', 'req', this)">Request Details</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-12', 'test', this)">Test Script & Assertions</button>
+        </div>
+        
+        <!-- Response Pane -->
+        <div class="tab-content" id="pane-TC-12-resp">
+          <div class="pane-meta">
+            <span><strong>Status:</strong> 200</span>
+            <span><strong>Latency:</strong> 8.4 ms</span>
+            <span><strong>Content-Type:</strong> application/json</span>
+          </div>
+          <pre class="code-block"><code>{
+  &quot;id&quot;: 1,
+  &quot;name&quot;: &quot;UltraView 4K Monitor&quot;,
+  &quot;category&quot;: &quot;Electronics&quot;,
+  &quot;price&quot;: 249.99,
+  &quot;cost&quot;: 137.0,
+  &quot;competitor_1&quot;: 265.0,
+  &quot;competitor_2&quot;: 258.0,
+  &quot;competitor_3&quot;: 253.7,
+  &quot;competitor_avg&quot;: 258.9,
+  &quot;margin_pct&quot;: 45.2,
+  &quot;daily_demand&quot;: 38.2,
+  &quot;stock&quot;: 550,
+  &quot;sales_channel&quot;: &quot;Direct Web&quot;,
+  &quot;rating&quot;: 4.9,
+  &quot;annual_revenue&quot;: 3485610.57,
+  &quot;status&quot;: &quot;Optimal&quot;
+}</code></pre>
+        </div>
+        
+        <!-- Request Pane -->
+        <div class="tab-content" id="pane-TC-12-req" style="display:none;">
+          <div class="pane-meta">
+            <span><strong>Method:</strong> PUT</span>
+            <span><strong>URL:</strong> http://127.0.0.1:8000/api/products/1</span>
+            <span><strong>Auth:</strong> Bearer JWT</span>
+          </div>
+          <div style="margin-top:10px; font-weight:600; font-size:12px; color:#9ca3af;">REQUEST PAYLOAD:</div>
+          <pre class="code-block"><code>{&quot;price&quot;: 249.99, &quot;rating&quot;: 4.9, &quot;status&quot;: &quot;Optimal&quot;}</code></pre>
+        </div>
+        
+        <!-- Test Assertion Pane -->
+        <div class="tab-content" id="pane-TC-12-test" style="display:none;">
+          <div class="assertion-box">
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Assertion Passed:</strong> Status == 200 & updated price reflected
+                <div class="assertion-detail">Expected HTTP Status 200 &rarr; Received HTTP Status 200</div>
+              </div>
+            </div>
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Postman Test Script:</strong> pm.test("Status code is 200", function () { pm.response.to.have.status(200); });
+                <div class="assertion-detail">Execution time: 8.4 ms (SLA &lt; 500 ms)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="test-card cat-products" id="card-TC-13">
+      <div class="card-header" onclick="toggleDetails('TC-13')">
+        <div class="header-left">
+          <span class="tc-num">TC-13</span>
+          <span style="background:#7f1d1d; color:#ef4444; font-family:monospace; font-weight:700; padding:3px 8px; border-radius:4px; font-size:12px; border:1px solid #ef444440;">DELETE</span>
+          <span class="endpoint-text">/api/products/15</span>
+          <span class="test-name-tag">Delete Product from Inventory (Admin)</span>
+        </div>
+        <div class="header-right">
+          <span class="auth-pill">Bearer JWT</span>
+          <span style="background:#064e3b; color:#34d399; font-weight:700; padding:3px 10px; border-radius:12px; font-size:12px; border:1px solid #34d39950;">● 200 OK</span>
+          <span class="latency-pill">⚡ 9.26 ms</span>
+          <span class="result-badge pass-badge">PASS</span>
+          <span class="expand-icon" id="icon-TC-13">▼</span>
+        </div>
+      </div>
+      
+      <div class="card-body" id="body-TC-13" style="display:none;">
+        <div class="inner-tabs">
+          <button class="tab-btn active" onclick="switchInnerTab('TC-13', 'resp', this)">Response Body</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-13', 'req', this)">Request Details</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-13', 'test', this)">Test Script & Assertions</button>
+        </div>
+        
+        <!-- Response Pane -->
+        <div class="tab-content" id="pane-TC-13-resp">
+          <div class="pane-meta">
+            <span><strong>Status:</strong> 200</span>
+            <span><strong>Latency:</strong> 9.26 ms</span>
+            <span><strong>Content-Type:</strong> application/json</span>
+          </div>
+          <pre class="code-block"><code>{
+  &quot;status&quot;: &quot;success&quot;,
+  &quot;message&quot;: &quot;Product &#x27;ZenAroma Diffuser&#x27; (ID: 15) successfully removed from catalog&quot;,
+  &quot;remaining_count&quot;: 15
+}</code></pre>
+        </div>
+        
+        <!-- Request Pane -->
+        <div class="tab-content" id="pane-TC-13-req" style="display:none;">
+          <div class="pane-meta">
+            <span><strong>Method:</strong> DELETE</span>
+            <span><strong>URL:</strong> http://127.0.0.1:8000/api/products/15</span>
+            <span><strong>Auth:</strong> Bearer JWT</span>
+          </div>
+          <div style="margin-top:10px; font-weight:600; font-size:12px; color:#9ca3af;">REQUEST PAYLOAD:</div>
+          <pre class="code-block"><code>None</code></pre>
+        </div>
+        
+        <!-- Test Assertion Pane -->
+        <div class="tab-content" id="pane-TC-13-test" style="display:none;">
+          <div class="assertion-box">
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Assertion Passed:</strong> Status == 200 & remaining count updated
+                <div class="assertion-detail">Expected HTTP Status 200 &rarr; Received HTTP Status 200</div>
+              </div>
+            </div>
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Postman Test Script:</strong> pm.test("Status code is 200", function () { pm.response.to.have.status(200); });
+                <div class="assertion-detail">Execution time: 9.26 ms (SLA &lt; 500 ms)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="test-card cat-rbac" id="card-TC-14">
+      <div class="card-header" onclick="toggleDetails('TC-14')">
+        <div class="header-left">
+          <span class="tc-num">TC-14</span>
+          <span style="background:#064e3b; color:#10b981; font-family:monospace; font-weight:700; padding:3px 8px; border-radius:4px; font-size:12px; border:1px solid #10b98140;">GET</span>
+          <span class="endpoint-text">/api/products</span>
+          <span class="test-name-tag">Block Product Access Without JWT Token</span>
+        </div>
+        <div class="header-right">
+          <span class="auth-pill">None (Public)</span>
+          <span style="background:#78350f; color:#fbbf24; font-weight:700; padding:3px 10px; border-radius:12px; font-size:12px; border:1px solid #fbbf2450;">● 401 Unauthorized</span>
+          <span class="latency-pill">⚡ 9.38 ms</span>
+          <span class="result-badge pass-badge">PASS</span>
+          <span class="expand-icon" id="icon-TC-14">▼</span>
+        </div>
+      </div>
+      
+      <div class="card-body" id="body-TC-14" style="display:none;">
+        <div class="inner-tabs">
+          <button class="tab-btn active" onclick="switchInnerTab('TC-14', 'resp', this)">Response Body</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-14', 'req', this)">Request Details</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-14', 'test', this)">Test Script & Assertions</button>
+        </div>
+        
+        <!-- Response Pane -->
+        <div class="tab-content" id="pane-TC-14-resp">
+          <div class="pane-meta">
+            <span><strong>Status:</strong> 401</span>
+            <span><strong>Latency:</strong> 9.38 ms</span>
+            <span><strong>Content-Type:</strong> application/json</span>
+          </div>
+          <pre class="code-block"><code>{
+  &quot;detail&quot;: &quot;Authentication token required. Header: Authorization: Bearer &lt;token&gt;&quot;
+}</code></pre>
+        </div>
+        
+        <!-- Request Pane -->
+        <div class="tab-content" id="pane-TC-14-req" style="display:none;">
+          <div class="pane-meta">
+            <span><strong>Method:</strong> GET</span>
+            <span><strong>URL:</strong> http://127.0.0.1:8000/api/products</span>
+            <span><strong>Auth:</strong> None (Public)</span>
+          </div>
+          <div style="margin-top:10px; font-weight:600; font-size:12px; color:#9ca3af;">REQUEST PAYLOAD:</div>
+          <pre class="code-block"><code>None</code></pre>
+        </div>
+        
+        <!-- Test Assertion Pane -->
+        <div class="tab-content" id="pane-TC-14-test" style="display:none;">
+          <div class="assertion-box">
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Assertion Passed:</strong> Status == 401 Unauthorized
+                <div class="assertion-detail">Expected HTTP Status 401 &rarr; Received HTTP Status 401</div>
+              </div>
+            </div>
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Postman Test Script:</strong> pm.test("Status code is 401", function () { pm.response.to.have.status(401); });
+                <div class="assertion-detail">Execution time: 9.38 ms (SLA &lt; 500 ms)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="test-card cat-catalogs" id="card-TC-15">
+      <div class="card-header" onclick="toggleDetails('TC-15')">
+        <div class="header-left">
+          <span class="tc-num">TC-15</span>
+          <span style="background:#064e3b; color:#10b981; font-family:monospace; font-weight:700; padding:3px 8px; border-radius:4px; font-size:12px; border:1px solid #10b98140;">GET</span>
+          <span class="endpoint-text">/api/catalogs</span>
+          <span class="test-name-tag">List Enterprise Pricing Catalogs</span>
+        </div>
+        <div class="header-right">
+          <span class="auth-pill">Bearer JWT</span>
+          <span style="background:#064e3b; color:#34d399; font-weight:700; padding:3px 10px; border-radius:12px; font-size:12px; border:1px solid #34d39950;">● 200 OK</span>
+          <span class="latency-pill">⚡ 9.91 ms</span>
+          <span class="result-badge pass-badge">PASS</span>
+          <span class="expand-icon" id="icon-TC-15">▼</span>
+        </div>
+      </div>
+      
+      <div class="card-body" id="body-TC-15" style="display:none;">
+        <div class="inner-tabs">
+          <button class="tab-btn active" onclick="switchInnerTab('TC-15', 'resp', this)">Response Body</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-15', 'req', this)">Request Details</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-15', 'test', this)">Test Script & Assertions</button>
+        </div>
+        
+        <!-- Response Pane -->
+        <div class="tab-content" id="pane-TC-15-resp">
+          <div class="pane-meta">
+            <span><strong>Status:</strong> 200</span>
+            <span><strong>Latency:</strong> 9.91 ms</span>
+            <span><strong>Content-Type:</strong> application/json</span>
+          </div>
+          <pre class="code-block"><code>{
+  &quot;status&quot;: &quot;success&quot;,
+  &quot;accessed_by&quot;: &quot;admin@pricepilot.ai&quot;,
+  &quot;user_role&quot;: &quot;admin&quot;,
+  &quot;catalogs&quot;: [
+    {
+      &quot;id&quot;: &quot;cat-electronics&quot;,
+      &quot;name&quot;: &quot;Consumer Electronics&quot;,
+      &quot;active_skus&quot;: 4,
+      &quot;revenue&quot;: 10590000
+    },
+    {
+      &quot;id&quot;: &quot;cat-home&quot;,
+      &quot;name&quot;: &quot;Home &amp; Kitchen Appliances&quot;,
+      &quot;active_skus&quot;: 3,
+      &quot;revenue&quot;: 6300000
+    },
+    {
+      &quot;id&quot;: &quot;cat-sports&quot;,
+      &quot;name&quot;: &quot;Sports &amp; Athletic Gear&quot;,
+      &quot;active_skus&quot;: 3,
+      &quot;revenue&quot;: 5720000
+    },
+    {
+      &quot;id&quot;: &quot;cat-apparel&quot;,
+      &quot;name&quot;: &quot;Fashion &amp; Apparel&quot;,
+      &quot;active_skus&quot;: 2,
+      &quot;revenue&quot;: 4010000
+    },
+    {
+      &quot;id&quot;: &quot;cat-health&quot;,
+      &quot;name&quot;: &quot;Health &amp; Beauty&quot;,
+      &quot;active_skus&quot;: 3,
+      &quot;revenue&quot;: 1630000
+    }
+  ]
+}</code></pre>
+        </div>
+        
+        <!-- Request Pane -->
+        <div class="tab-content" id="pane-TC-15-req" style="display:none;">
+          <div class="pane-meta">
+            <span><strong>Method:</strong> GET</span>
+            <span><strong>URL:</strong> http://127.0.0.1:8000/api/catalogs</span>
+            <span><strong>Auth:</strong> Bearer JWT</span>
+          </div>
+          <div style="margin-top:10px; font-weight:600; font-size:12px; color:#9ca3af;">REQUEST PAYLOAD:</div>
+          <pre class="code-block"><code>None</code></pre>
+        </div>
+        
+        <!-- Test Assertion Pane -->
+        <div class="tab-content" id="pane-TC-15-test" style="display:none;">
+          <div class="assertion-box">
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Assertion Passed:</strong> Status == 200 & returns catalogs array with category metadata
+                <div class="assertion-detail">Expected HTTP Status 200 &rarr; Received HTTP Status 200</div>
+              </div>
+            </div>
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Postman Test Script:</strong> pm.test("Status code is 200", function () { pm.response.to.have.status(200); });
+                <div class="assertion-detail">Execution time: 9.91 ms (SLA &lt; 500 ms)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="test-card cat-catalogs" id="card-TC-16">
+      <div class="card-header" onclick="toggleDetails('TC-16')">
+        <div class="header-left">
+          <span class="tc-num">TC-16</span>
+          <span style="background:#064e3b; color:#10b981; font-family:monospace; font-weight:700; padding:3px 8px; border-radius:4px; font-size:12px; border:1px solid #10b98140;">GET</span>
+          <span class="endpoint-text">/api/catalogs/cat-electronics</span>
+          <span class="test-name-tag">Get Detailed Catalog Metrics & Price Elasticity</span>
+        </div>
+        <div class="header-right">
+          <span class="auth-pill">Bearer JWT</span>
+          <span style="background:#064e3b; color:#34d399; font-weight:700; padding:3px 10px; border-radius:12px; font-size:12px; border:1px solid #34d39950;">● 200 OK</span>
+          <span class="latency-pill">⚡ 4.31 ms</span>
+          <span class="result-badge pass-badge">PASS</span>
+          <span class="expand-icon" id="icon-TC-16">▼</span>
+        </div>
+      </div>
+      
+      <div class="card-body" id="body-TC-16" style="display:none;">
+        <div class="inner-tabs">
+          <button class="tab-btn active" onclick="switchInnerTab('TC-16', 'resp', this)">Response Body</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-16', 'req', this)">Request Details</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-16', 'test', this)">Test Script & Assertions</button>
+        </div>
+        
+        <!-- Response Pane -->
+        <div class="tab-content" id="pane-TC-16-resp">
+          <div class="pane-meta">
+            <span><strong>Status:</strong> 200</span>
+            <span><strong>Latency:</strong> 4.31 ms</span>
+            <span><strong>Content-Type:</strong> application/json</span>
+          </div>
+          <pre class="code-block"><code>{
+  &quot;status&quot;: &quot;success&quot;,
+  &quot;catalog_id&quot;: &quot;cat-electronics&quot;,
+  &quot;catalog_name&quot;: &quot;Consumer Electronics&quot;,
+  &quot;accessed_by&quot;: &quot;admin@pricepilot.ai&quot;,
+  &quot;role&quot;: &quot;admin&quot;,
+  &quot;metrics&quot;: {
+    &quot;total_revenue&quot;: 10590000,
+    &quot;average_margin&quot;: 44.2,
+    &quot;price_elasticity&quot;: -1.2
+  }
+}</code></pre>
+        </div>
+        
+        <!-- Request Pane -->
+        <div class="tab-content" id="pane-TC-16-req" style="display:none;">
+          <div class="pane-meta">
+            <span><strong>Method:</strong> GET</span>
+            <span><strong>URL:</strong> http://127.0.0.1:8000/api/catalogs/cat-electronics</span>
+            <span><strong>Auth:</strong> Bearer JWT</span>
+          </div>
+          <div style="margin-top:10px; font-weight:600; font-size:12px; color:#9ca3af;">REQUEST PAYLOAD:</div>
+          <pre class="code-block"><code>None</code></pre>
+        </div>
+        
+        <!-- Test Assertion Pane -->
+        <div class="tab-content" id="pane-TC-16-test" style="display:none;">
+          <div class="assertion-box">
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Assertion Passed:</strong> Status == 200 & returns price elasticity coefficient
+                <div class="assertion-detail">Expected HTTP Status 200 &rarr; Received HTTP Status 200</div>
+              </div>
+            </div>
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Postman Test Script:</strong> pm.test("Status code is 200", function () { pm.response.to.have.status(200); });
+                <div class="assertion-detail">Execution time: 4.31 ms (SLA &lt; 500 ms)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="test-card cat-ml" id="card-TC-17">
+      <div class="card-header" onclick="toggleDetails('TC-17')">
+        <div class="header-left">
+          <span class="tc-num">TC-17</span>
+          <span style="background:#78350f; color:#f59e0b; font-family:monospace; font-weight:700; padding:3px 8px; border-radius:4px; font-size:12px; border:1px solid #f59e0b40;">POST</span>
+          <span class="endpoint-text">/api/price-optimization?product_id=2</span>
+          <span class="test-name-tag">LightGBM Dynamic Price Optimization Model</span>
+        </div>
+        <div class="header-right">
+          <span class="auth-pill">Bearer JWT</span>
+          <span style="background:#064e3b; color:#34d399; font-weight:700; padding:3px 10px; border-radius:12px; font-size:12px; border:1px solid #34d39950;">● 200 OK</span>
+          <span class="latency-pill">⚡ 8.41 ms</span>
+          <span class="result-badge pass-badge">PASS</span>
+          <span class="expand-icon" id="icon-TC-17">▼</span>
+        </div>
+      </div>
+      
+      <div class="card-body" id="body-TC-17" style="display:none;">
+        <div class="inner-tabs">
+          <button class="tab-btn active" onclick="switchInnerTab('TC-17', 'resp', this)">Response Body</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-17', 'req', this)">Request Details</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-17', 'test', this)">Test Script & Assertions</button>
+        </div>
+        
+        <!-- Response Pane -->
+        <div class="tab-content" id="pane-TC-17-resp">
+          <div class="pane-meta">
+            <span><strong>Status:</strong> 200</span>
+            <span><strong>Latency:</strong> 8.41 ms</span>
+            <span><strong>Content-Type:</strong> application/json</span>
+          </div>
+          <pre class="code-block"><code>{
+  &quot;status&quot;: &quot;success&quot;,
+  &quot;product_id&quot;: 2,
+  &quot;product_name&quot;: &quot;Aura Pro Headphones&quot;,
+  &quot;optimized_by&quot;: &quot;admin@pricepilot.ai&quot;,
+  &quot;user_role&quot;: &quot;admin&quot;,
+  &quot;model&quot;: &quot;LightGBM Regressor (R2=1.0000, RMSE=$0.45)&quot;,
+  &quot;current_price&quot;: 187.5,
+  &quot;recommended_price&quot;: 193.5,
+  &quot;expected_margin_pct&quot;: 41.1,
+  &quot;confidence_score&quot;: 0.984
+}</code></pre>
+        </div>
+        
+        <!-- Request Pane -->
+        <div class="tab-content" id="pane-TC-17-req" style="display:none;">
+          <div class="pane-meta">
+            <span><strong>Method:</strong> POST</span>
+            <span><strong>URL:</strong> http://127.0.0.1:8000/api/price-optimization?product_id=2</span>
+            <span><strong>Auth:</strong> Bearer JWT</span>
+          </div>
+          <div style="margin-top:10px; font-weight:600; font-size:12px; color:#9ca3af;">REQUEST PAYLOAD:</div>
+          <pre class="code-block"><code>None</code></pre>
+        </div>
+        
+        <!-- Test Assertion Pane -->
+        <div class="tab-content" id="pane-TC-17-test" style="display:none;">
+          <div class="assertion-box">
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Assertion Passed:</strong> Status == 200 & returns recommended_price, confidence_score, revenue_lift
+                <div class="assertion-detail">Expected HTTP Status 200 &rarr; Received HTTP Status 200</div>
+              </div>
+            </div>
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Postman Test Script:</strong> pm.test("Status code is 200", function () { pm.response.to.have.status(200); });
+                <div class="assertion-detail">Execution time: 8.41 ms (SLA &lt; 500 ms)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="test-card cat-oauth" id="card-TC-18">
+      <div class="card-header" onclick="toggleDetails('TC-18')">
+        <div class="header-left">
+          <span class="tc-num">TC-18</span>
+          <span style="background:#064e3b; color:#10b981; font-family:monospace; font-weight:700; padding:3px 8px; border-radius:4px; font-size:12px; border:1px solid #10b98140;">GET</span>
+          <span class="endpoint-text">/api/auth/google/callback?email=yuvraj.patil.google@gmail.com&name=Yuvraj%20Patil</span>
+          <span class="test-name-tag">Google Sign-In OAuth Callback & Token Issue</span>
+        </div>
+        <div class="header-right">
+          <span class="auth-pill">None (Public)</span>
+          <span style="background:#064e3b; color:#34d399; font-weight:700; padding:3px 10px; border-radius:12px; font-size:12px; border:1px solid #34d39950;">● 200 OK</span>
+          <span class="latency-pill">⚡ 17.43 ms</span>
+          <span class="result-badge pass-badge">PASS</span>
+          <span class="expand-icon" id="icon-TC-18">▼</span>
+        </div>
+      </div>
+      
+      <div class="card-body" id="body-TC-18" style="display:none;">
+        <div class="inner-tabs">
+          <button class="tab-btn active" onclick="switchInnerTab('TC-18', 'resp', this)">Response Body</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-18', 'req', this)">Request Details</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-18', 'test', this)">Test Script & Assertions</button>
+        </div>
+        
+        <!-- Response Pane -->
+        <div class="tab-content" id="pane-TC-18-resp">
+          <div class="pane-meta">
+            <span><strong>Status:</strong> 200</span>
+            <span><strong>Latency:</strong> 17.43 ms</span>
+            <span><strong>Content-Type:</strong> application/json</span>
+          </div>
+          <pre class="code-block"><code>{
+  &quot;access_token&quot;: &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1IiwiZW1haWwiOiJ5dXZyYWoucGF0aWwuZ29vZ2xlQGdtYWlsLmNvbSIsIm5hbWUiOiJZdXZyYWogUGF0aWwiLCJyb2xlIjoidXNlciIsImlhdCI6MTc5MTM4NDEzMiwiZXhwIjoxNzkxNDcwNTMyfQ.jBO0DJieM5SM5GmsuMMhXZ4nupEWh1bb5MzlDBKvyjk&quot;,
+  &quot;token_type&quot;: &quot;bearer&quot;,
+  &quot;user&quot;: {
+    &quot;id&quot;: 5,
+    &quot;name&quot;: &quot;Yuvraj Patil&quot;,
+    &quot;email&quot;: &quot;yuvraj.patil.google@gmail.com&quot;,
+    &quot;profile_image&quot;: &quot;https://lh3.googleusercontent.com/a/default-user&quot;,
+    &quot;auth_provider&quot;: &quot;google&quot;,
+    &quot;provider_user_id&quot;: &quot;google_10738104&quot;,
+    &quot;role&quot;: &quot;user&quot;,
+    &quot;permissions&quot;: [
+      &quot;dashboard&quot;,
+      &quot;product_kpis&quot;,
+      &quot;ai_insights&quot;
+    ],
+    &quot;created_at&quot;: &quot;2026-10-07T14:42:12&quot;
+  },
+  &quot;message&quot;: &quot;Authentication successful&quot;
+}</code></pre>
+        </div>
+        
+        <!-- Request Pane -->
+        <div class="tab-content" id="pane-TC-18-req" style="display:none;">
+          <div class="pane-meta">
+            <span><strong>Method:</strong> GET</span>
+            <span><strong>URL:</strong> http://127.0.0.1:8000/api/auth/google/callback?email=yuvraj.patil.google@gmail.com&name=Yuvraj%20Patil</span>
+            <span><strong>Auth:</strong> None (Public)</span>
+          </div>
+          <div style="margin-top:10px; font-weight:600; font-size:12px; color:#9ca3af;">REQUEST PAYLOAD:</div>
+          <pre class="code-block"><code>None</code></pre>
+        </div>
+        
+        <!-- Test Assertion Pane -->
+        <div class="tab-content" id="pane-TC-18-test" style="display:none;">
+          <div class="assertion-box">
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Assertion Passed:</strong> Status == 200 & access_token generated & user registered
+                <div class="assertion-detail">Expected HTTP Status 200 &rarr; Received HTTP Status 200</div>
+              </div>
+            </div>
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Postman Test Script:</strong> pm.test("Status code is 200", function () { pm.response.to.have.status(200); });
+                <div class="assertion-detail">Execution time: 17.43 ms (SLA &lt; 500 ms)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="test-card cat-oauth" id="card-TC-19">
+      <div class="card-header" onclick="toggleDetails('TC-19')">
+        <div class="header-left">
+          <span class="tc-num">TC-19</span>
+          <span style="background:#064e3b; color:#10b981; font-family:monospace; font-weight:700; padding:3px 8px; border-radius:4px; font-size:12px; border:1px solid #10b98140;">GET</span>
+          <span class="endpoint-text">/api/auth/github/callback?username=yuvrajcet26&email=yuvrajcet26@github.auth</span>
+          <span class="test-name-tag">GitHub OAuth Callback & Token Issue</span>
+        </div>
+        <div class="header-right">
+          <span class="auth-pill">None (Public)</span>
+          <span style="background:#064e3b; color:#34d399; font-weight:700; padding:3px 10px; border-radius:12px; font-size:12px; border:1px solid #34d39950;">● 200 OK</span>
+          <span class="latency-pill">⚡ 18.62 ms</span>
+          <span class="result-badge pass-badge">PASS</span>
+          <span class="expand-icon" id="icon-TC-19">▼</span>
+        </div>
+      </div>
+      
+      <div class="card-body" id="body-TC-19" style="display:none;">
+        <div class="inner-tabs">
+          <button class="tab-btn active" onclick="switchInnerTab('TC-19', 'resp', this)">Response Body</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-19', 'req', this)">Request Details</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-19', 'test', this)">Test Script & Assertions</button>
+        </div>
+        
+        <!-- Response Pane -->
+        <div class="tab-content" id="pane-TC-19-resp">
+          <div class="pane-meta">
+            <span><strong>Status:</strong> 200</span>
+            <span><strong>Latency:</strong> 18.62 ms</span>
+            <span><strong>Content-Type:</strong> application/json</span>
+          </div>
+          <pre class="code-block"><code>{
+  &quot;access_token&quot;: &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZW1haWwiOiJ5dXZyYWpjZXQyNkBnaXRodWIuYXV0aCIsIm5hbWUiOiJ5dXZyYWpjZXQyNiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzkxMzg0MTMyLCJleHAiOjE3OTE0NzA1MzJ9.8CICXhHa3Xma-U7mQLsIjYOIbAJwZKXAmPAGanw5wkI&quot;,
+  &quot;token_type&quot;: &quot;bearer&quot;,
+  &quot;user&quot;: {
+    &quot;id&quot;: 6,
+    &quot;name&quot;: &quot;yuvrajcet26&quot;,
+    &quot;email&quot;: &quot;yuvrajcet26@github.auth&quot;,
+    &quot;profile_image&quot;: &quot;https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png&quot;,
+    &quot;auth_provider&quot;: &quot;github&quot;,
+    &quot;provider_user_id&quot;: &quot;gh_66015182&quot;,
+    &quot;role&quot;: &quot;user&quot;,
+    &quot;permissions&quot;: [
+      &quot;dashboard&quot;,
+      &quot;product_kpis&quot;,
+      &quot;ai_insights&quot;
+    ],
+    &quot;created_at&quot;: &quot;2026-10-07T14:42:12&quot;
+  },
+  &quot;message&quot;: &quot;Authentication successful&quot;
+}</code></pre>
+        </div>
+        
+        <!-- Request Pane -->
+        <div class="tab-content" id="pane-TC-19-req" style="display:none;">
+          <div class="pane-meta">
+            <span><strong>Method:</strong> GET</span>
+            <span><strong>URL:</strong> http://127.0.0.1:8000/api/auth/github/callback?username=yuvrajcet26&email=yuvrajcet26@github.auth</span>
+            <span><strong>Auth:</strong> None (Public)</span>
+          </div>
+          <div style="margin-top:10px; font-weight:600; font-size:12px; color:#9ca3af;">REQUEST PAYLOAD:</div>
+          <pre class="code-block"><code>None</code></pre>
+        </div>
+        
+        <!-- Test Assertion Pane -->
+        <div class="tab-content" id="pane-TC-19-test" style="display:none;">
+          <div class="assertion-box">
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Assertion Passed:</strong> Status == 200 & access_token generated
+                <div class="assertion-detail">Expected HTTP Status 200 &rarr; Received HTTP Status 200</div>
+              </div>
+            </div>
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Postman Test Script:</strong> pm.test("Status code is 200", function () { pm.response.to.have.status(200); });
+                <div class="assertion-detail">Execution time: 18.62 ms (SLA &lt; 500 ms)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="test-card cat-oauth" id="card-TC-20">
+      <div class="card-header" onclick="toggleDetails('TC-20')">
+        <div class="header-left">
+          <span class="tc-num">TC-20</span>
+          <span style="background:#064e3b; color:#10b981; font-family:monospace; font-weight:700; padding:3px 8px; border-radius:4px; font-size:12px; border:1px solid #10b98140;">GET</span>
+          <span class="endpoint-text">/api/auth/microsoft/callback?email=yuvraj@outlook.com&name=Yuvraj%20Patil</span>
+          <span class="test-name-tag">Microsoft OAuth Callback & Token Issue</span>
+        </div>
+        <div class="header-right">
+          <span class="auth-pill">None (Public)</span>
+          <span style="background:#064e3b; color:#34d399; font-weight:700; padding:3px 10px; border-radius:12px; font-size:12px; border:1px solid #34d39950;">● 200 OK</span>
+          <span class="latency-pill">⚡ 15.78 ms</span>
+          <span class="result-badge pass-badge">PASS</span>
+          <span class="expand-icon" id="icon-TC-20">▼</span>
+        </div>
+      </div>
+      
+      <div class="card-body" id="body-TC-20" style="display:none;">
+        <div class="inner-tabs">
+          <button class="tab-btn active" onclick="switchInnerTab('TC-20', 'resp', this)">Response Body</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-20', 'req', this)">Request Details</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-20', 'test', this)">Test Script & Assertions</button>
+        </div>
+        
+        <!-- Response Pane -->
+        <div class="tab-content" id="pane-TC-20-resp">
+          <div class="pane-meta">
+            <span><strong>Status:</strong> 200</span>
+            <span><strong>Latency:</strong> 15.78 ms</span>
+            <span><strong>Content-Type:</strong> application/json</span>
+          </div>
+          <pre class="code-block"><code>{
+  &quot;access_token&quot;: &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3IiwiZW1haWwiOiJ5dXZyYWpAb3V0bG9vay5jb20iLCJuYW1lIjoiWXV2cmFqIFBhdGlsIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3OTEzODQxMzIsImV4cCI6MTc5MTQ3MDUzMn0.Qc4Qcej8rk-ab-YIyN7TAiKOMZ0VR9JDXZNXBx7V9zI&quot;,
+  &quot;token_type&quot;: &quot;bearer&quot;,
+  &quot;user&quot;: {
+    &quot;id&quot;: 7,
+    &quot;name&quot;: &quot;Yuvraj Patil&quot;,
+    &quot;email&quot;: &quot;yuvraj@outlook.com&quot;,
+    &quot;profile_image&quot;: null,
+    &quot;auth_provider&quot;: &quot;microsoft&quot;,
+    &quot;provider_user_id&quot;: &quot;ms_34751395&quot;,
+    &quot;role&quot;: &quot;user&quot;,
+    &quot;permissions&quot;: [
+      &quot;dashboard&quot;,
+      &quot;product_kpis&quot;,
+      &quot;ai_insights&quot;
+    ],
+    &quot;created_at&quot;: &quot;2026-10-07T14:42:12&quot;
+  },
+  &quot;message&quot;: &quot;Authentication successful&quot;
+}</code></pre>
+        </div>
+        
+        <!-- Request Pane -->
+        <div class="tab-content" id="pane-TC-20-req" style="display:none;">
+          <div class="pane-meta">
+            <span><strong>Method:</strong> GET</span>
+            <span><strong>URL:</strong> http://127.0.0.1:8000/api/auth/microsoft/callback?email=yuvraj@outlook.com&name=Yuvraj%20Patil</span>
+            <span><strong>Auth:</strong> None (Public)</span>
+          </div>
+          <div style="margin-top:10px; font-weight:600; font-size:12px; color:#9ca3af;">REQUEST PAYLOAD:</div>
+          <pre class="code-block"><code>None</code></pre>
+        </div>
+        
+        <!-- Test Assertion Pane -->
+        <div class="tab-content" id="pane-TC-20-test" style="display:none;">
+          <div class="assertion-box">
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Assertion Passed:</strong> Status == 200 & access_token generated
+                <div class="assertion-detail">Expected HTTP Status 200 &rarr; Received HTTP Status 200</div>
+              </div>
+            </div>
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Postman Test Script:</strong> pm.test("Status code is 200", function () { pm.response.to.have.status(200); });
+                <div class="assertion-detail">Execution time: 15.78 ms (SLA &lt; 500 ms)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="test-card cat-health" id="card-TC-21">
+      <div class="card-header" onclick="toggleDetails('TC-21')">
+        <div class="header-left">
+          <span class="tc-num">TC-21</span>
+          <span style="background:#064e3b; color:#10b981; font-family:monospace; font-weight:700; padding:3px 8px; border-radius:4px; font-size:12px; border:1px solid #10b98140;">GET</span>
+          <span class="endpoint-text">/health</span>
+          <span class="test-name-tag">API Gateway Health Check & Service Status</span>
+        </div>
+        <div class="header-right">
+          <span class="auth-pill">None (Public)</span>
+          <span style="background:#064e3b; color:#34d399; font-weight:700; padding:3px 10px; border-radius:12px; font-size:12px; border:1px solid #34d39950;">● 200 OK</span>
+          <span class="latency-pill">⚡ 30.88 ms</span>
+          <span class="result-badge pass-badge">PASS</span>
+          <span class="expand-icon" id="icon-TC-21">▼</span>
+        </div>
+      </div>
+      
+      <div class="card-body" id="body-TC-21" style="display:none;">
+        <div class="inner-tabs">
+          <button class="tab-btn active" onclick="switchInnerTab('TC-21', 'resp', this)">Response Body</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-21', 'req', this)">Request Details</button>
+          <button class="tab-btn" onclick="switchInnerTab('TC-21', 'test', this)">Test Script & Assertions</button>
+        </div>
+        
+        <!-- Response Pane -->
+        <div class="tab-content" id="pane-TC-21-resp">
+          <div class="pane-meta">
+            <span><strong>Status:</strong> 200</span>
+            <span><strong>Latency:</strong> 30.88 ms</span>
+            <span><strong>Content-Type:</strong> application/json</span>
+          </div>
+          <pre class="code-block"><code>{
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;version&quot;: &quot;3.0.0&quot;
+}</code></pre>
+        </div>
+        
+        <!-- Request Pane -->
+        <div class="tab-content" id="pane-TC-21-req" style="display:none;">
+          <div class="pane-meta">
+            <span><strong>Method:</strong> GET</span>
+            <span><strong>URL:</strong> http://127.0.0.1:8000/health</span>
+            <span><strong>Auth:</strong> None (Public)</span>
+          </div>
+          <div style="margin-top:10px; font-weight:600; font-size:12px; color:#9ca3af;">REQUEST PAYLOAD:</div>
+          <pre class="code-block"><code>None</code></pre>
+        </div>
+        
+        <!-- Test Assertion Pane -->
+        <div class="tab-content" id="pane-TC-21-test" style="display:none;">
+          <div class="assertion-box">
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Assertion Passed:</strong> Status == 200 & status == 'healthy'
+                <div class="assertion-detail">Expected HTTP Status 200 &rarr; Received HTTP Status 200</div>
+              </div>
+            </div>
+            <div class="assertion-item pass">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong>Postman Test Script:</strong> pm.test("Status code is 200", function () { pm.response.to.have.status(200); });
+                <div class="assertion-detail">Execution time: 30.88 ms (SLA &lt; 500 ms)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    </div>
+
+  </main>
+
+  <!-- Postman Guide Modal -->
+  <div class="modal-backdrop" id="guideModal" onclick="if(event.target==this) closeGuideModal()">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 style="font-size:16px; font-weight:700;"><i class="fa-solid fa-paper-plane" style="color:var(--postman-orange);"></i> Running in Postman Desktop App</h3>
+        <button class="modal-close" onclick="closeGuideModal()">&times;</button>
+      </div>
+      <div style="font-size:13px; color:#c9d1d9; line-height:1.6;">
+        <div class="step-item">
+          <div class="step-badge">1</div>
+          <div>
+            <strong>Open Postman:</strong> Double click on <code>Postman.lnk</code> on your Desktop.
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-badge">2</div>
+          <div>
+            <strong>Import the Collection:</strong> Click <strong>Import</strong> (top-left) &rarr; Drag and drop the file:<br>
+            <code>C:\Users\jojo\OneDrive\Desktop\PricePilot_AI_Milestone3\PricePilot_AI_Auth_Postman_Collection.json</code>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-badge">3</div>
+          <div>
+            <strong>Run Collection:</strong> Click the <strong>...</strong> next to "PricePilot AI Milestone 3", select <strong>Run collection</strong>, and click <strong>Run PricePilot AI</strong>. All 21 requests execute with 100% PASS!
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:20px; text-align:right;">
+        <button class="btn btn-orange" onclick="closeGuideModal()">Got It</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleDetails(id) {
+      const body = document.getElementById('body-' + id);
+      const icon = document.getElementById('icon-' + id);
+      if (body.style.display === 'none') {
+        body.style.display = 'block';
+        icon.style.transform = 'rotate(180deg)';
+      } else {
+        body.style.display = 'none';
+        icon.style.transform = 'rotate(0deg)';
+      }
+    }
+
+    function switchInnerTab(id, tabName, btn) {
+      const parent = btn.parentElement;
+      parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const cardBody = document.getElementById('body-' + id);
+      cardBody.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+      document.getElementById('pane-' + id + '-' + tabName).style.display = 'block';
+    }
+
+    function filterCards(cat, btn) {
+      document.querySelectorAll('.f-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const cards = document.querySelectorAll('.test-card');
+      cards.forEach(c => {
+        if (cat === 'all' || c.classList.contains(cat)) {
+          c.style.display = 'block';
+        } else {
+          c.style.display = 'none';
+        }
+      });
+    }
+
+    function searchCards(query) {
+      const q = query.toLowerCase();
+      const cards = document.querySelectorAll('.test-card');
+      cards.forEach(c => {
+        const text = c.innerText.toLowerCase();
+        if (text.includes(q)) {
+          c.style.display = 'block';
+        } else {
+          c.style.display = 'none';
+        }
+      });
+    }
+
+    function openGuideModal() {
+      document.getElementById('guideModal').style.display = 'flex';
+    }
+    function closeGuideModal() {
+      document.getElementById('guideModal').style.display = 'none';
+    }
+  </script>
+</body>
+</html>

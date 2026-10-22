@@ -1,0 +1,756 @@
+{
+	"id": "316e5201-da0b-403f-8648-1652964186f6",
+	"name": "PricePilot AI - JWT Authentication & Product Information APIs (Milestone 3)",
+	"timestamp": "2026-10-07T16:13:15.255Z",
+	"collection_id": "58790922-e953257d-00ec-4ba3-bc98-28f4ce8fc0ee",
+	"folder_id": 0,
+	"environment_id": "0",
+	"totalPass": 18,
+	"delay": 0,
+	"persist": true,
+	"status": "finished",
+	"startedAt": "2026-10-07T16:13:13.123Z",
+	"totalFail": 12,
+	"results": [
+		{
+			"id": "40e7ce7d-b477-4fd3-9942-2fcbd8241fae",
+			"name": "POST /api/auth/register (Create New Account & Issue JWT)",
+			"url": "http://127.0.0.1:8000/api/auth/register",
+			"time": 18,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status code is 201 Created": false,
+				"Response contains valid JWT access_token": false
+			},
+			"testPassFailCounts": {
+				"Status code is 201 Created": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Response contains valid JWT access_token": {
+					"pass": 0,
+					"fail": 1
+				}
+			},
+			"times": [
+				18
+			],
+			"allTests": [
+				{
+					"Status code is 201 Created": false,
+					"Response contains valid JWT access_token": false
+				}
+			]
+		},
+		{
+			"id": "cf06c785-2415-4f08-b1b0-acbbe5d8a9b8",
+			"name": "POST /api/auth/login (Admin Sign In - Issue Admin JWT)",
+			"url": "http://127.0.0.1:8000/api/auth/login",
+			"time": 119,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200 OK": true,
+				"Admin JWT issued and saved": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200 OK": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Admin JWT issued and saved": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				119
+			],
+			"allTests": [
+				{
+					"Status code is 200 OK": true,
+					"Admin JWT issued and saved": true
+				}
+			]
+		},
+		{
+			"id": "a3aed474-5de0-490d-bc42-57260b8107fd",
+			"name": "POST /api/auth/login (Analyst Sign In - Issue Analyst JWT)",
+			"url": "http://127.0.0.1:8000/api/auth/login",
+			"time": 106,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200 OK": true,
+				"Analyst JWT issued and saved": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200 OK": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Analyst JWT issued and saved": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				106
+			],
+			"allTests": [
+				{
+					"Status code is 200 OK": true,
+					"Analyst JWT issued and saved": true
+				}
+			]
+		},
+		{
+			"id": "69f0dce8-762d-4253-bf3c-9615c32d0574",
+			"name": "POST /api/auth/login (User Sign In - Issue User JWT)",
+			"url": "http://127.0.0.1:8000/api/auth/login",
+			"time": 119,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200 OK": true,
+				"User JWT issued and saved": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200 OK": {
+					"pass": 1,
+					"fail": 0
+				},
+				"User JWT issued and saved": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				119
+			],
+			"allTests": [
+				{
+					"Status code is 200 OK": true,
+					"User JWT issued and saved": true
+				}
+			]
+		},
+		{
+			"id": "c85e1f05-e107-46c6-ba4e-62b069021a8e",
+			"name": "GET /api/auth/me (Get Authenticated User Profile with JWT)",
+			"url": "http://127.0.0.1:8000/api/auth/me",
+			"time": 17,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200 OK": true,
+				"Profile matches authenticated JWT user": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200 OK": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Profile matches authenticated JWT user": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				17
+			],
+			"allTests": [
+				{
+					"Status code is 200 OK": true,
+					"Profile matches authenticated JWT user": true
+				}
+			]
+		},
+		{
+			"id": "e208a709-50b5-4c0a-8d4d-4c90bcca831c",
+			"name": "GET /api/auth/me (Unauthorized Test - Missing JWT)",
+			"url": "http://127.0.0.1:8000/api/auth/me",
+			"time": 11,
+			"responseCode": {
+				"code": 401,
+				"name": "Unauthorized"
+			},
+			"tests": {
+				"Status code is 401 Unauthorized": true
+			},
+			"testPassFailCounts": {
+				"Status code is 401 Unauthorized": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				11
+			],
+			"allTests": [
+				{
+					"Status code is 401 Unauthorized": true
+				}
+			]
+		},
+		{
+			"id": "98d0fcb3-3453-453e-801f-ffe4710b79aa",
+			"name": "GET /api/products (List All Products with Metrics)",
+			"url": "http://127.0.0.1:8000/api/products",
+			"time": 14,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200 OK": true,
+				"Returns products list with financial metrics": false
+			},
+			"testPassFailCounts": {
+				"Status code is 200 OK": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns products list with financial metrics": {
+					"pass": 0,
+					"fail": 1
+				}
+			},
+			"times": [
+				14
+			],
+			"allTests": [
+				{
+					"Status code is 200 OK": true,
+					"Returns products list with financial metrics": false
+				}
+			]
+		},
+		{
+			"id": "c1125473-fef3-45c0-b590-739528c54076",
+			"name": "GET /api/products?category=Electronics (Filter Products by Category)",
+			"url": "http://127.0.0.1:8000/api/products?category=Electronics",
+			"time": 12,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200 OK": true,
+				"All returned products belong to Electronics": false
+			},
+			"testPassFailCounts": {
+				"Status code is 200 OK": {
+					"pass": 1,
+					"fail": 0
+				},
+				"All returned products belong to Electronics": {
+					"pass": 0,
+					"fail": 1
+				}
+			},
+			"times": [
+				12
+			],
+			"allTests": [
+				{
+					"Status code is 200 OK": true,
+					"All returned products belong to Electronics": false
+				}
+			]
+		},
+		{
+			"id": "3d43eb5d-3627-4776-ae99-6649ba53c30d",
+			"name": "GET /api/products/1 (Get Single Product Detailed Information)",
+			"url": "http://127.0.0.1:8000/api/products/1",
+			"time": 5,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Status code is 200 OK": false,
+				"Product has all 8+ detailed parameters": false
+			},
+			"testPassFailCounts": {
+				"Status code is 200 OK": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Product has all 8+ detailed parameters": {
+					"pass": 0,
+					"fail": 1
+				}
+			},
+			"times": [
+				5
+			],
+			"allTests": [
+				{
+					"Status code is 200 OK": false,
+					"Product has all 8+ detailed parameters": false
+				}
+			]
+		},
+		{
+			"id": "817545e8-a129-4d9a-a5a2-f245d0492db8",
+			"name": "POST /api/products (Add New Product Information - Admin Only)",
+			"url": "http://127.0.0.1:8000/api/products",
+			"time": 11,
+			"responseCode": {
+				"code": 405,
+				"name": "Method Not Allowed"
+			},
+			"tests": {
+				"Status code is 201 Created": false,
+				"New product created with calculated metrics": false
+			},
+			"testPassFailCounts": {
+				"Status code is 201 Created": {
+					"pass": 0,
+					"fail": 1
+				},
+				"New product created with calculated metrics": {
+					"pass": 0,
+					"fail": 1
+				}
+			},
+			"times": [
+				11
+			],
+			"allTests": [
+				{
+					"Status code is 201 Created": false,
+					"New product created with calculated metrics": false
+				}
+			]
+		},
+		{
+			"id": "277733a0-1ce2-4e98-a4ae-370dc161906d",
+			"name": "POST /api/products (Forbidden Test - User Role Cannot Add Product)",
+			"url": "http://127.0.0.1:8000/api/products",
+			"time": 7,
+			"responseCode": {
+				"code": 405,
+				"name": "Method Not Allowed"
+			},
+			"tests": {
+				"Status code is 403 Forbidden": false,
+				"Error message specifies Admin restriction": false
+			},
+			"testPassFailCounts": {
+				"Status code is 403 Forbidden": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Error message specifies Admin restriction": {
+					"pass": 0,
+					"fail": 1
+				}
+			},
+			"times": [
+				7
+			],
+			"allTests": [
+				{
+					"Status code is 403 Forbidden": false,
+					"Error message specifies Admin restriction": false
+				}
+			]
+		},
+		{
+			"id": "af56810e-d511-4d80-92f7-a2c26415bb65",
+			"name": "PUT /api/products/1 (Update Product Information - Admin Only)",
+			"url": "http://127.0.0.1:8000/api/products/1",
+			"time": 12,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Status code is 200 OK": false,
+				"Product price and margin updated": false
+			},
+			"testPassFailCounts": {
+				"Status code is 200 OK": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Product price and margin updated": {
+					"pass": 0,
+					"fail": 1
+				}
+			},
+			"times": [
+				12
+			],
+			"allTests": [
+				{
+					"Status code is 200 OK": false,
+					"Product price and margin updated": false
+				}
+			]
+		},
+		{
+			"id": "a0395bd0-fffd-4e6b-af46-37449677f788",
+			"name": "GET /api/products (Unauthorized Test - Missing JWT Token)",
+			"url": "http://127.0.0.1:8000/api/products",
+			"time": 9,
+			"responseCode": {
+				"code": 401,
+				"name": "Unauthorized"
+			},
+			"tests": {
+				"Status code is 401 Unauthorized": true
+			},
+			"testPassFailCounts": {
+				"Status code is 401 Unauthorized": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				9
+			],
+			"allTests": [
+				{
+					"Status code is 401 Unauthorized": true
+				}
+			]
+		},
+		{
+			"id": "3138a6f0-f2af-4c12-b843-9523329e42af",
+			"name": "http://127.0.0.1:8000/api/v3/predict/price",
+			"url": "http://127.0.0.1:8000/api/v3/predict/price",
+			"time": 15,
+			"responseCode": {
+				"code": 422,
+				"name": "Unprocessable Content"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				15
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "cc4de367-bafd-4b82-9c6b-d6f4345716b0",
+			"name": "GET /api/catalogs (List Enterprise Catalogs)",
+			"url": "http://127.0.0.1:8000/api/catalogs",
+			"time": 19,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200 OK": true,
+				"Catalogs contain 5 business sectors": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200 OK": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Catalogs contain 5 business sectors": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				19
+			],
+			"allTests": [
+				{
+					"Status code is 200 OK": true,
+					"Catalogs contain 5 business sectors": true
+				}
+			]
+		},
+		{
+			"id": "9bd400ae-e908-4cf9-93d1-01e550a6e4ce",
+			"name": "GET /api/catalogs/cat-electronics (Catalog Details & Elasticity)",
+			"url": "http://127.0.0.1:8000/api/catalogs/cat-electronics",
+			"time": 13,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200 OK": true,
+				"Contains metrics and elasticity": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200 OK": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Contains metrics and elasticity": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				13
+			],
+			"allTests": [
+				{
+					"Status code is 200 OK": true,
+					"Contains metrics and elasticity": true
+				}
+			]
+		},
+		{
+			"id": "694aa4df-70b0-42a8-b74e-0d4a4365f8d4",
+			"name": "POST /api/price-optimization (Run LightGBM Optimization)",
+			"url": "http://127.0.0.1:8000/api/price-optimization?product_id=2",
+			"time": 17,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200 OK": true,
+				"Returns recommended optimal price and confidence": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200 OK": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Returns recommended optimal price and confidence": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				17
+			],
+			"allTests": [
+				{
+					"Status code is 200 OK": true,
+					"Returns recommended optimal price and confidence": true
+				}
+			]
+		},
+		{
+			"id": "6e92dec5-7aba-49c9-9578-634b279d729a",
+			"name": "GET /api/auth/google (Initiate Google OAuth Flow)",
+			"url": "http://127.0.0.1:8000/api/auth/google?redirect_to_consent=false",
+			"time": 7,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				7
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "7f7d1f80-e104-4503-8661-916906f152b7",
+			"name": "GET /api/auth/google/callback (Google OAuth Token Callback)",
+			"url": "http://127.0.0.1:8000/api/auth/google/callback?email=analyst.google@pricepilot.ai&name=Google Analyst",
+			"time": 30,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				30
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "3d244b94-7e36-4584-ab2e-5a3146a6c9e4",
+			"name": "GET /api/auth/github (Initiate GitHub OAuth Flow)",
+			"url": "http://127.0.0.1:8000/api/auth/github?redirect_to_consent=false",
+			"time": 9,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				9
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "28dd6968-ce44-4231-b7b5-4451ba0aec1d",
+			"name": "GET /api/auth/github/callback (GitHub OAuth Token Callback)",
+			"url": "http://127.0.0.1:8000/api/auth/github/callback?username=github_analyst&email=analyst@github.auth",
+			"time": 19,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				19
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "7b65c0fd-2164-40f6-bc5d-b8564e3d87e7",
+			"name": "GET /api/auth/microsoft (Initiate Microsoft OAuth Flow)",
+			"url": "http://127.0.0.1:8000/api/auth/microsoft?redirect_to_consent=false",
+			"time": 7,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				7
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "28b85fa0-7e10-4e69-b911-de5f50d91e43",
+			"name": "GET /api/auth/microsoft/callback (Microsoft OAuth Token Callback)",
+			"url": "http://127.0.0.1:8000/api/auth/microsoft/callback?email=analyst@outlook.com&name=Microsoft Analyst",
+			"time": 14,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				14
+			],
+			"allTests": [
+				{}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 610,
+	"collection": {
+		"requests": [
+			{
+				"id": "40e7ce7d-b477-4fd3-9942-2fcbd8241fae",
+				"method": "POST"
+			},
+			{
+				"id": "cf06c785-2415-4f08-b1b0-acbbe5d8a9b8",
+				"method": "POST"
+			},
+			{
+				"id": "a3aed474-5de0-490d-bc42-57260b8107fd",
+				"method": "POST"
+			},
+			{
+				"id": "69f0dce8-762d-4253-bf3c-9615c32d0574",
+				"method": "POST"
+			},
+			{
+				"id": "c85e1f05-e107-46c6-ba4e-62b069021a8e",
+				"method": "GET"
+			},
+			{
+				"id": "e208a709-50b5-4c0a-8d4d-4c90bcca831c",
+				"method": "GET"
+			},
+			{
+				"id": "98d0fcb3-3453-453e-801f-ffe4710b79aa",
+				"method": "GET"
+			},
+			{
+				"id": "c1125473-fef3-45c0-b590-739528c54076",
+				"method": "GET"
+			},
+			{
+				"id": "3d43eb5d-3627-4776-ae99-6649ba53c30d",
+				"method": "GET"
+			},
+			{
+				"id": "817545e8-a129-4d9a-a5a2-f245d0492db8",
+				"method": "POST"
+			},
+			{
+				"id": "277733a0-1ce2-4e98-a4ae-370dc161906d",
+				"method": "POST"
+			},
+			{
+				"id": "af56810e-d511-4d80-92f7-a2c26415bb65",
+				"method": "PUT"
+			},
+			{
+				"id": "a0395bd0-fffd-4e6b-af46-37449677f788",
+				"method": "GET"
+			},
+			{
+				"id": "3138a6f0-f2af-4c12-b843-9523329e42af",
+				"method": "POST"
+			},
+			{
+				"id": "cc4de367-bafd-4b82-9c6b-d6f4345716b0",
+				"method": "GET"
+			},
+			{
+				"id": "9bd400ae-e908-4cf9-93d1-01e550a6e4ce",
+				"method": "GET"
+			},
+			{
+				"id": "694aa4df-70b0-42a8-b74e-0d4a4365f8d4",
+				"method": "POST"
+			},
+			{
+				"id": "6e92dec5-7aba-49c9-9578-634b279d729a",
+				"method": "GET"
+			},
+			{
+				"id": "7f7d1f80-e104-4503-8661-916906f152b7",
+				"method": "GET"
+			},
+			{
+				"id": "3d244b94-7e36-4584-ab2e-5a3146a6c9e4",
+				"method": "GET"
+			},
+			{
+				"id": "28dd6968-ce44-4231-b7b5-4451ba0aec1d",
+				"method": "GET"
+			},
+			{
+				"id": "7b65c0fd-2164-40f6-bc5d-b8564e3d87e7",
+				"method": "GET"
+			},
+			{
+				"id": "28b85fa0-7e10-4e69-b911-de5f50d91e43",
+				"method": "GET"
+			}
+		]
+	}
+}

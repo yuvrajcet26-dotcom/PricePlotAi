@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PricePilot_Inventory_Schema",
+  "type": "object",
+  "properties": {
+    "item_id": { "type": "integer" },
+    "name": { "type": "string" },
+    "category": { "type": "string" },
+    "stock_quantity": { "type": "integer", "minimum": 0 },
+    "critical_threshold": { "type": "integer", "default": 50 },
+    "low_stock_threshold": { "type": "integer", "default": 100 },
+    "restock_batch_size": { "type": "integer", "default": 250 },
+    "supplier": { "type": "string" }
+  },
+  "required": ["item_id", "name", "category", "stock_quantity"]
+}

@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/inventory", "dest": "/inventory/inventory.html" },
+    { "src": "/landing", "dest": "/landing.html" },
+    { "src": "/.*", "dest": "/index.html" }
+  ]
+}

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PricePilot AI — Inventory & Stock Replenishment Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --bg: #0b1120; --surf: #131c31; --surf2: #1e293b; --bdr: #334155;
+      --txt: #f1f5f9; --txt2: #94a3b8; --acc: #8b5cf6; --acc2: #06b6d4;
+      --grn: #10b981; --red: #ef4444; --yel: #f59e0b;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter',sans-serif; }
+    body { background: var(--bg); color: var(--txt); min-height: 100vh; padding: 24px; }
+    .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--bdr); padding-bottom: 18px; margin-bottom: 24px; }
+    .logo { display: flex; align-items: center; gap: 12px; }
+    .logo-icon { width: 42px; height: 42px; border-radius: 10px; background: linear-gradient(135deg,var(--acc),var(--acc2)); display: flex; align-items: center; justify-content: center; font-size: 20px; color: #fff; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .kpi-card { background: var(--surf); border: 1px solid var(--bdr); border-radius: 12px; padding: 18px; }
+    .kpi-label { font-size: 11px; font-weight: 700; color: var(--txt2); text-transform: uppercase; margin-bottom: 6px; }
+    .kpi-val { font-size: 24px; font-weight: 800; color: #fff; }
+    .table-wrap { background: var(--surf); border: 1px solid var(--bdr); border-radius: 14px; overflow: hidden; }
+    .search-bar { padding: 14px 18px; border-bottom: 1px solid var(--bdr); display: flex; gap: 12px; align-items: center; }
+    .search-bar input { flex: 1; background: var(--bg); border: 1px solid var(--bdr); border-radius: 8px; padding: 9px 14px; color: #fff; outline: none; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+    th { background: rgba(255,255,255,0.02); color: var(--txt2); padding: 12px 16px; font-weight: 600; border-bottom: 1px solid var(--bdr); }
+    td { padding: 12px 16px; border-bottom: 1px solid rgba(51,65,85,0.3); }
+    .renew-btn { background: linear-gradient(135deg, #059669, #10b981); color: #fff; border: none; border-radius: 6px; padding: 6px 12px; font-size: 11.5px; font-weight: 700; cursor: pointer; }
+    .renew-btn:hover { background: #047857; }
+    .stock-badge { padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; }
+    .stock-critical { background: rgba(239, 68, 68, 0.18); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.4); }
+    .stock-optimal { background: rgba(16, 185, 129, 0.18); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .stock-low { background: rgba(245, 158, 11, 0.18); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.4); }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">
+      <div class="logo-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+      <div>
+        <h1 style="font-size:18px;font-weight:800">PricePilot AI &bull; Dedicated Inventory Hub</h1>
+        <p style="font-size:12px;color:var(--txt2)">Standalone Warehouse Stock & Replenishment Module</p>
+      </div>
+    </div>
+    <a href="../index.html" style="color:var(--acc2);text-decoration:none;font-weight:700;font-size:13px;display:flex;align-items:center;gap:6px">
+      <i class="fa-solid fa-arrow-left"></i> Return to Main Platform
+    </a>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Total Warehouse Units</div>
+      <div class="kpi-val" id="total-units">4,010 u</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Items On Verge of Stockout (&lt; 100u)</div>
+      <div class="kpi-val" style="color:#ef4444" id="crit-count">5 Items</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Total Asset Value</div>
+      <div class="kpi-val" style="color:var(--grn)">$584,200</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Automated Reorders</div>
+      <div class="kpi-val" style="color:var(--yel)">Active</div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <div class="search-bar">
+      <input type="text" id="inv-search" placeholder="Search product name or category..." oninput="renderTable()">
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Product Name</th>
+          <th>Category</th>
+          <th>Unit Cost</th>
+          <th>Selling Price</th>
+          <th>Current Stock</th>
+          <th>Daily Consumption</th>
+          <th>Days Left</th>
+          <th>Stock Health</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+  </div>
+
+  <script>
+    const ITEMS = [
+      {n:'ChefMaster Blender',cat:'Home & Kitchen',cost:46.20,price:98.50,stock:32,demand:37.6},
+      {n:'ProRunner Shoes',cat:'Sports & Outdoors',cost:75.00,price:142.00,stock:48,demand:33.9},
+      {n:'Aura Pro Headphones',cat:'Electronics',cost:110.50,price:187.50,stock:75,demand:40.7},
+      {n:'LuxeDream Mattress',cat:'Home & Kitchen',cost:84.80,price:189.00,stock:85,demand:28.4},
+      {n:'VitalBoost Vitamins',cat:'Health & Beauty',cost:12.00,price:38.00,stock:88,demand:52.7},
+      {n:'UltraView 4K Monitor',cat:'Electronics',cost:137.00,price:245.50,stock:420,demand:38.2},
+      {n:'SmartHome Hub Pro',cat:'Electronics',cost:63.00,price:132.00,stock:310,demand:35.1},
+      {n:'AquaPure Filter',cat:'Home & Kitchen',cost:27.80,price:67.00,stock:540,demand:44.2},
+      {n:'FlexFit Yoga Mat',cat:'Sports & Outdoors',cost:18.00,price:45.00,stock:420,demand:49.8},
+      {n:'HydroPeak Bottle',cat:'Sports & Outdoors',cost:12.00,price:35.00,stock:680,demand:58.3}
+    ];
+
+    function renderTable(){
+      const q = document.getElementById('inv-search').value.toLowerCase();
+      const tbody = document.getElementById('table-body');
+      tbody.innerHTML = ITEMS.filter(x => x.n.toLowerCase().includes(q) || x.cat.toLowerCase().includes(q)).map((x, i) => {
+        const days = Math.round(x.stock / x.demand);
+        const isCrit = x.stock < 50;
+        const isLow = x.stock >= 50 && x.stock < 100;
+        const badge = isCrit ? `<span class="stock-badge stock-critical"><i class="fa-solid fa-triangle-exclamation"></i> Critical (${x.stock}u)</span>` : (isLow ? `<span class="stock-badge stock-low"><i class="fa-solid fa-clock"></i> Low Stock (${x.stock}u)</span>` : `<span class="stock-badge stock-optimal"><i class="fa-solid fa-circle-check"></i> Optimal (${x.stock}u)</span>`);
+        return `
+          <tr>
+            <td><strong>${x.n}</strong></td>
+            <td><span style="color:var(--txt2)">${x.cat}</span></td>
+            <td>$${x.cost.toFixed(2)}</td>
+            <td><strong>$${x.price.toFixed(2)}</strong></td>
+            <td style="font-weight:700;color:${isCrit?'#ef4444':(isLow?'#f59e0b':'#10b981')}">${x.stock} units</td>
+            <td>${x.demand} u/day</td>
+            <td><strong>${days} days</strong></td>
+            <td>${badge}</td>
+            <td>
+              <button class="renew-btn" onclick="renewStock(${i})">
+                <i class="fa-solid fa-plus"></i> Renew (+250)
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renewStock(i){
+      ITEMS[i].stock += 250;
+      alert(`Restocked +250 units for ${ITEMS[i].n}. New stock: ${ITEMS[i].stock} units.`);
+      renderTable();
+    }
+    renderTable();
+  </script>
+</body>
+</html>

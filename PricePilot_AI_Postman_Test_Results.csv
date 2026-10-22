@@ -1,0 +1,22 @@
+Test_ID,Module,Test_Name,Method,Endpoint,Auth_Type,Expected_Status,Actual_Status,Latency_ms,Assertion,Result
+TC-01,JWT Authentication,Register New User,POST,/api/auth/register,None (Public),201,201,264.62,Status == 201 & access_token generated,PASS
+TC-02,JWT Authentication,Admin Login & Token Generation,POST,/api/auth/login,None (Public),200,200,82.92,Status == 200 & role == 'admin' & JWT returned,PASS
+TC-03,JWT Authentication,Business Analyst Login,POST,/api/auth/login,None (Public),200,200,82.33,Status == 200 & role == 'analyst',PASS
+TC-04,JWT Authentication,Standard User Login,POST,/api/auth/login,None (Public),200,200,80.11,Status == 200 & role == 'user',PASS
+TC-05,JWT Authentication,Get Current User Profile (Admin),GET,/api/auth/me,Bearer JWT,200,200,12.95,Status == 200 & user email matches admin,PASS
+TC-06,JWT Authentication,Verify 401 Unauthorized Without Token,GET,/api/auth/me,None (Public),401,401,5.0,Status == 401 & detail == 'Not authenticated',PASS
+TC-07,Product Information CRUD,List All 15 Enterprise Products,GET,/api/products,Bearer JWT,200,200,8.54,Status == 200 & product count == 15 & total_revenue present,PASS
+TC-08,Product Information CRUD,Filter Products by Category (Electronics),GET,/api/products?category=Electronics,Bearer JWT,200,200,9.4,Status == 200 & all returned items category == 'Electronics',PASS
+TC-09,Product Information CRUD,Get Complete Single Product Details (10+ Attributes),GET,/api/products/1,Bearer JWT,200,200,64.04,"Status == 200 & contains price, cost, competitor_avg, margin_pct, stock, demand",PASS
+TC-10,Product Information CRUD,Create New Product with Competitor Benchmarks (Admin),POST,/api/products,Bearer JWT,201,201,8.06,Status == 201 & ID generated & margin_pct auto-calculated,PASS
+TC-11,Role-Based Access Control (RBAC),RBAC Guard: Prevent Standard User from Adding Product,POST,/api/products,Bearer JWT,403,403,8.18,Status == 403 Forbidden & detail contains 'Admin access required',PASS
+TC-12,Product Information CRUD,Update Product Pricing & Rating (Admin),PUT,/api/products/1,Bearer JWT,200,200,8.4,Status == 200 & updated price reflected,PASS
+TC-13,Product Information CRUD,Delete Product from Inventory (Admin),DELETE,/api/products/15,Bearer JWT,200,200,9.26,Status == 200 & remaining count updated,PASS
+TC-14,Role-Based Access Control (RBAC),Block Product Access Without JWT Token,GET,/api/products,None (Public),401,401,9.38,Status == 401 Unauthorized,PASS
+TC-15,Enterprise Catalogs,List Enterprise Pricing Catalogs,GET,/api/catalogs,Bearer JWT,200,200,9.91,Status == 200 & returns catalogs array with category metadata,PASS
+TC-16,Enterprise Catalogs,Get Detailed Catalog Metrics & Price Elasticity,GET,/api/catalogs/cat-electronics,Bearer JWT,200,200,4.31,Status == 200 & returns price elasticity coefficient,PASS
+TC-17,ML Price Optimization,LightGBM Dynamic Price Optimization Model,POST,/api/price-optimization?product_id=2,Bearer JWT,200,200,8.41,"Status == 200 & returns recommended_price, confidence_score, revenue_lift",PASS
+TC-18,OAuth 2.0 Integration,Google Sign-In OAuth Callback & Token Issue,GET,/api/auth/google/callback?email=yuvraj.patil.google@gmail.com&name=Yuvraj%20Patil,None (Public),200,200,17.43,Status == 200 & access_token generated & user registered,PASS
+TC-19,OAuth 2.0 Integration,GitHub OAuth Callback & Token Issue,GET,/api/auth/github/callback?username=yuvrajcet26&email=yuvrajcet26@github.auth,None (Public),200,200,18.62,Status == 200 & access_token generated,PASS
+TC-20,OAuth 2.0 Integration,Microsoft OAuth Callback & Token Issue,GET,/api/auth/microsoft/callback?email=yuvraj@outlook.com&name=Yuvraj%20Patil,None (Public),200,200,15.78,Status == 200 & access_token generated,PASS
+TC-21,System Health & Ops,API Gateway Health Check & Service Status,GET,/health,None (Public),200,200,30.88,Status == 200 & status == 'healthy',PASS
